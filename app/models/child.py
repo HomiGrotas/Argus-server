@@ -9,9 +9,11 @@ class Child(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('Parents.id'), nullable=False)
     nickname = db.Column(db.String, unique=True, default='Anonymous Child')
-    usage_limits = db.Column(db.JSON)
+    usage_limits = db.Column(db.JSON)       # {day: amount}
     block_websites = db.Column(db.String)   # List will be parsed to '[x, y, z]'
+    blocked = db.Column(db.BOOLEAN, default=False)
+
     activity = relationship('ChildActivity')
     web_history = relationship('WebHistory')
-    waiting_commands = relationship('Commands')
-    blocked = db.Column(db.BOOLEAN, default=False)
+    waiting_commands = relationship('Command')
+

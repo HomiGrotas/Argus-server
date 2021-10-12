@@ -8,5 +8,5 @@ class Parent(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True, nullable=False)
-    password_hash = db.Column(db.String(64))
+    password_hash = db.Column(db.String(64), nullable=False)
     children = relationship('Child')

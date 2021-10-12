@@ -7,3 +7,4 @@ class Command(CreatedAt, db.Model):
 
     command_id = db.Column(db.Integer, primary_key=True)
     command = db.Column(db.String, nullable=False)
+    to_user = db.Column(db.Integer, db.ForeignKey('Children.id'), nullable=False)
