@@ -1,13 +1,16 @@
 ### Example user template template
 ### Example user template
 
+# customed
+.dcignore
+app.db
+
 # IntelliJ project files
 .idea
 *.iml
 out
 gen
-.dcignore
-app.db
+
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/

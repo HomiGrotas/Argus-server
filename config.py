@@ -11,3 +11,4 @@ class Config(object):
                               'sqlite:///' + os.path.join(basedir, 'app.db')  # creates a local db when no uri is set
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    DEBUG = True
