@@ -1,4 +1,5 @@
 from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String
 
 from app import db
 
@@ -6,10 +7,10 @@ from app import db
 class Parent(db.Model):
     __tablename__ = 'Parents'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
 
-    nickname = db.Column(db.String)
-    email = db.Column(db.String(50), unique=True, nullable=False)
-    password_hash = db.Column(db.String(64), nullable=False)
+    nickname = Column(String)
+    email = Column(String(50), unique=True, nullable=False)
+    password_hash = Column(String(64), nullable=False)
 
     children = relationship('Child')
