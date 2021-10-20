@@ -1,10 +1,6 @@
 from datetime import datetime
-from passlib.hash import sha256_crypt
 from sqlalchemy import Column, DateTime
-
-
-def hash_password(password: str) -> str:
-    return sha256_crypt.hash(password)
+from enum import Enum
 
 
 class CreatedAt(object):
@@ -14,3 +10,8 @@ class CreatedAt(object):
 class TimeStamp(object):
     start = Column(DateTime, nullable=False, default=datetime.utcnow)
     end = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class UsersTypes(Enum):
+    parent = 1
+    child = 2

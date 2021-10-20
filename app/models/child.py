@@ -1,5 +1,7 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey
+from flask_jwt_extended import create_access_token, get_jwt_identity
+
 
 from app import db
 
@@ -18,3 +20,6 @@ class Child(db.Model):
     web_history = relationship('WebHistory')
     waiting_commands = relationship('Command')
 
+    def generate_auth_token(self):
+        additional_claims = {"type": "child"}
+        return create_access_token(identity=self.id, additional_claims=additional_claims)

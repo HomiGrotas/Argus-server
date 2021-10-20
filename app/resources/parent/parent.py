@@ -2,54 +2,65 @@ from flask_restful import Resource
 from flask import current_app as app
 from sqlalchemy.exc import SQLAlchemyError
 from http import HTTPStatus
+from flask import g
 
-
-from app.resources.parent.args_handlers import parent_info_parser, parent_registration_parser
+from app.resources.parent.args_handlers import parent_registration_parser, parent_updater_parser
 from app.resources import exceptions
-from app.models.utils import hash_password
-from app import models, db
+from app import models, db,auth
 
 
 class Parent(Resource):
     def post(self):
         args = parent_registration_parser.parse_args()
         email = args.get('email')
-        password = args.get('password')
         nickname = args.get('nickname')
+        password = args.get('password')
 
         if models.Parent.query.filter_by(email=email).first() is not None:
             raise exceptions.EmailAlreadyTaken
 
-        password_hash = hash_password(password)
-        parent = models.Parent(email=email, password_hash=password_hash)
+        parent = models.Parent(email=email)
         parent.nickname = nickname
+        parent.password_hash = parent.hash_password(password)
 
         try:
             db.session.add(parent)
             db.session.commit()
-            return HTTPStatus.CREATED
-
-        except SQLAlchemyError:
-            db.session.rollback()
-            raise exceptions.InternalServerError
+            return parent.generate_auth_token(), HTTPStatus.CREATED
 
         except Exception as e:
             app.logger.error("Error: %s", e.__str__())
+            db.session.rollback()
             raise exceptions.InternalServerError
 
+    @auth.login_required
     def get(self):
-        # ToDo: tokenize with jwt (and custom info for parent/his children)
-
-        args = parent_info_parser.parse_args()
-        parent_id = args.get('id')
-
-        parent = models.Parent.query.get(parent_id)
-        if not parent:
-            raise exceptions.NoSuchParent
-
-        info = {'email': parent.email, 'nickname': parent.nickname}
+        if g.user_type == models.UsersTypes.parent.name:
+            info = g.user.info()
+        else:
+            parent = Parent.query.get(g.user.parent_id)
+            info = parent.info()
         return info, HTTPStatus.OK
 
+    @auth.login_required
     def patch(self):
-        # ToDo: update nickname, password and email
-        pass
+        if g.user_type != models.UsersTypes.parent.name:
+            raise exceptions.NotAuthorized
+        args = parent_updater_parser.parse_args()
+
+        for key, value in args.items():
+            if key == 'password':
+                setattr(g.user, 'password_hash', g.user.hash_password(value))
+            setattr(g.user, key, value)
+
+        try:
+            db.session.add(g.user)
+            db.session.commit()
+            print(g.user.info())
+
+        except Exception as e:
+            app.logger.error("Error: %s", e.__str__())
+            db.session.rollback()
+            raise exceptions.InternalServerError
+
+        return g.user.info(), HTTPStatus.OK
