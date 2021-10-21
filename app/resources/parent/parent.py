@@ -50,11 +50,11 @@ class Parent(Resource):
 
         for key, value in args.items():
             if value:
-                if key == 'password':  # todo: email isn't in db
+                if key == 'password':
                     setattr(g.user, 'password_hash', g.user.hash_password(value))
                     continue
-                if key == 'email':
-                    if models.Parent.query.filter_by(email=value).first() is not None:
+                if key == 'email' and value != g.user.email:
+                    if models.Parent.query.filter_by(email=value).first() is not None:  # email doesn't exists
                         raise exceptions.EmailAlreadyTaken
                     setattr(g.user, key, value)
                     continue
