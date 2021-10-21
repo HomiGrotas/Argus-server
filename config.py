@@ -3,6 +3,8 @@ import secrets
 from datetime import timedelta
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+EXPIRATION_MIN = 2
+
 
 class Config(object):
     SECRET_KEY = """OB5TR9Ztzx3Yt9uB-eV707uJB7MCOxuH20oBO6E7pCLN4P9nIgl40tlHyYv8W6NfRh6ljt0bepeEpNnBdeFGBmTF21-knRY6dmJPf
@@ -14,5 +16,5 @@ apNjExOG5aJPAkPyVM4RrjPk3xO2H0bGHh3medADzM_hEd-eN3UtzGUzWIKPOQXsQ5AaWg
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or \
                               'sqlite:///' + os.path.join(basedir, 'app.db')  # creates a local db when no uri is set
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_REFRESH_TOKEN_EXPIRES = timedelta(0)    # disable expiration
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(minutes=EXPIRATION_MIN)    # disable expiration
     DEBUG = True

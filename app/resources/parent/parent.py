@@ -1,12 +1,11 @@
 from flask_restful import Resource
 from flask import current_app as app
-from sqlalchemy.exc import SQLAlchemyError
 from http import HTTPStatus
 from flask import g
 
 from app.resources.parent.args_handlers import parent_registration_parser, parent_updater_parser
 from app.resources import exceptions
-from app import models, db,auth
+from app import models, db, auth
 
 
 class Parent(Resource):

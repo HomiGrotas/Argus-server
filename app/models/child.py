@@ -11,7 +11,11 @@ class Child(db.Model):
 
     id = Column(Integer, primary_key=True)
     parent_id = Column(Integer, ForeignKey('Parents.id'), nullable=False)
-    nickname = Column(String, unique=True, default='Anonymous Child')
+
+    mac_address = Column(String, unique=True, nullable=False)
+    token = Column(String, unique=True, nullable=False)
+    nickname = Column(String, unique=True)
+
     usage_limits = Column(JSON)       # {day: amount}
     block_websites = Column(String)   # List will be parsed to '[x, y, z]'
     blocked = Column(BOOLEAN, default=False)

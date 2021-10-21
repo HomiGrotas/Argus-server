@@ -5,8 +5,6 @@ from hashlib import sha256
 
 from app import db
 
-# ToDo: disable tokens expiration
-
 
 class Parent(db.Model):
     __tablename__ = 'Parents'
@@ -20,7 +18,7 @@ class Parent(db.Model):
     children = relationship('Child')
 
     def hash_password(self, password):
-        self.password_hash = sha256(password).hexdigest()
+        self.password_hash = sha256(password.encode()).hexdigest()
 
     def generate_auth_token(self):
         additional_claims = {"type": "parent"}
