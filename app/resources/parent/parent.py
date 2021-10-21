@@ -49,14 +49,21 @@ class Parent(Resource):
         args = parent_updater_parser.parse_args()
 
         for key, value in args.items():
-            if key == 'password':
-                setattr(g.user, 'password_hash', g.user.hash_password(value))
-            setattr(g.user, key, value)
+            if value:
+                if key == 'password':  # todo: email isn't in db
+                    setattr(g.user, 'password_hash', g.user.hash_password(value))
+                    continue
+                if key == 'email':
+                    if models.Parent.query.filter_by(email=value).first() is not None:
+                        raise exceptions.EmailAlreadyTaken
+                    setattr(g.user, key, value)
+                    continue
+
+                setattr(g.user, key, value)
 
         try:
             db.session.add(g.user)
             db.session.commit()
-            print(g.user.info())
 
         except Exception as e:
             app.logger.error("Error: %s", e.__str__())
