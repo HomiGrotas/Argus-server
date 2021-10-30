@@ -14,17 +14,19 @@ auth = HTTPBasicAuth()
 
 
 def create_app():
-    from app.resources.parent import Parent
+    from app.resources.auth import Token
+    from app.resources.parent import Parent, ParentToken
+    from app.resources.child import Child
 
     f_app = Flask(__name__)
+    f_app.config['ENV'] = 'development'
     f_app.config.from_object(Config)
     db.init_app(f_app)
 
-    if f_app.debug:
-        db.create_all(app=f_app)
-        print(" * Reset db: flask_app is in debug mode")
-
+    restful.add_resource(Token, '/token')
     restful.add_resource(Parent, '/parent')
+    restful.add_resource(ParentToken, '/parent/child_registration_token')
+    restful.add_resource(Child, '/child')
 
     # noinspection PyTypeChecker
     restful.init_app(f_app)
@@ -32,6 +34,7 @@ def create_app():
     return f_app
 
 
+flask_app = create_app()
+
 if __name__ == '__main__':
-    flask_app = create_app()
     flask_app.run()
