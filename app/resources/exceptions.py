@@ -8,6 +8,10 @@ class EmailAlreadyTaken(HTTPException):
     pass
 
 
+class ChildAlreadyExists(HTTPException):
+    pass
+
+
 class InternalServerError(HTTPException):
     pass
 
@@ -69,5 +73,10 @@ errors = {
         {
             'message': "you aren't authorized for this method",
             'status': HTTPStatus.UNAUTHORIZED
+        },
+    "ChildAlreadyExists":
+        {
+            'message': 'child mac address already exists',
+            'status': HTTPStatus.BAD_REQUEST
         },
 }
