@@ -8,4 +8,4 @@ class Token(Resource):
 
     @auth.login_required
     def get(self):
-        return g.user.generate_auth_token()
+        return g.user.user.generate_auth_token()
