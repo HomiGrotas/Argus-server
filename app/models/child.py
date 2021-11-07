@@ -37,6 +37,7 @@ class Child(db.Model):
         return {
             'id': self.id,
             'nickname': self.nickname,
+            'mac_address': self.mac_address,
         }
 
     @staticmethod

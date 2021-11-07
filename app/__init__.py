@@ -2,15 +2,19 @@ from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
-from flask_httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth, MultiAuth
 
 from config import Config
 from app.resources.exceptions import errors
 
 db = SQLAlchemy()
 restful = Api(errors=errors)
-jwt = JWTManager()
-auth = HTTPBasicAuth()
+jwt = JWTManager()  # todo -> replace with basic jwt
+
+token_auth = HTTPTokenAuth('bearer')
+basic_auth = HTTPBasicAuth()
+
+auth = MultiAuth(basic_auth, token_auth)
 
 
 def create_app():

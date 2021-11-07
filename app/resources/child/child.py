@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import current_app as app
+from flask import current_app as app, g
 from http import HTTPStatus
 
 from .args_handlers import child_registration
@@ -25,12 +25,16 @@ class Child(Resource):
         try:
             db.session.add(child)
             db.session.commit()
-            return child.info(), HTTPStatus.CREATED
+            return {'token': child.token}, HTTPStatus.CREATED
 
         except Exception as e:
             app.logger.error("Error: %s", e.__str__())
             db.session.rollback()
             raise exceptions.InternalServerError
+
+    @auth.login_required(role=models.UsersTypes.child.name)
+    def get(self):
+        return g.user.user.info()
 
     @auth.login_required(role=models.UsersTypes.child.name)
     def patch(self):

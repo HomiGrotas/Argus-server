@@ -24,7 +24,7 @@ class Parent(Resource):
         try:
             db.session.add(parent)
             db.session.commit()
-            return parent.generate_auth_token(), HTTPStatus.CREATED
+            return {'token': parent.generate_auth_token()}, HTTPStatus.CREATED
 
         except Exception as e:
             app.logger.error("Error: %s", e.__str__())
@@ -32,7 +32,7 @@ class Parent(Resource):
             raise exceptions.InternalServerError
 
     @auth.login_required
-    def get(self):
+    def get(self):  # todo: check if child can use Parent resource (he can see his parent detail via GET Child)
         if g.user.type == models.UsersTypes.parent.name:
             parent = g.user.user
         else:
