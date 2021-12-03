@@ -1,6 +1,8 @@
 from validators import mac_address, email, ValidationFailure
 from collections import namedtuple
 
+# todo: move to models
+
 User = namedtuple('User', ['user', 'type'])
 
 

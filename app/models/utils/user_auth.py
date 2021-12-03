@@ -1,11 +1,14 @@
-from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from flask import g
 from typing import Union, Tuple
 
-from .utils import valid_email, valid_mac_address, User
+from app.resources.auth.utils import valid_email, valid_mac_address, User
 from app.models import Child, Parent, UsersTypes
 from app.resources.exceptions import UserTypeNotSpecified
 from app import basic_auth, token_auth
+
+# todo: add role
+# todo: change to basic jwt library
 
 
 def get_parent_by_email_password(p_email: str, p_password: str) -> Tuple[Union[Parent, Child, None], Union[str, None]]:
@@ -24,10 +27,11 @@ def get_child_by_mac_and_token(c_mac_address: str, c_token) -> Tuple[Union[Paren
 
 @token_auth.verify_token
 @jwt_required()
-def get_user_by_jwt_token() -> bool:
+def get_user_by_jwt_token(token) -> bool:
     """
         get users by x functions
     """
+    print('jwt <', token, '>')
     user_type = get_jwt().get('type')
     user_id = get_jwt_identity()
 
@@ -50,6 +54,7 @@ def get_user_by_jwt_token() -> bool:
 
 @basic_auth.verify_password
 def get_user_by_cred(email_or_mac, password) -> bool:
+    print('basic <', email_or_mac, password, '>')
     user, user_type = None, None
 
     if valid_email(email_or_mac):

@@ -31,13 +31,9 @@ class Parent(Resource):
             db.session.rollback()
             raise exceptions.InternalServerError
 
-    @auth.login_required
-    def get(self):  # todo: check if child can use Parent resource (he can see his parent detail via GET Child)
-        if g.user.type == models.UsersTypes.parent.name:
-            parent = g.user.user
-        else:
-            parent = models.Parent.query.get(g.user.user.parent_id)
-        return parent.info(), HTTPStatus.OK
+    @auth.login_required(role=models.UsersTypes.parent.name)
+    def get(self):
+        return g.user.user.info(), HTTPStatus.OK
 
     @auth.login_required(role=models.UsersTypes.parent.name)
     def patch(self):

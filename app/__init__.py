@@ -14,7 +14,7 @@ jwt = JWTManager()  # todo -> replace with basic jwt
 token_auth = HTTPTokenAuth('bearer')
 basic_auth = HTTPBasicAuth()
 
-auth = MultiAuth(basic_auth, token_auth)
+auth = MultiAuth(token_auth, basic_auth)
 
 
 def create_app():
