@@ -10,9 +10,7 @@ def valid_email(user_email: str) -> bool:
     """
         custom email validator
     """
-    try:
-        email(user_email)
-    except ValidationFailure:
+    if isinstance(email(user_email), ValidationFailure):
         return False
     else:
         return True
@@ -22,9 +20,7 @@ def valid_mac_address(user_mac_address: str) -> bool:
     """
         custom mac address validator
     """
-    try:
-        mac_address(user_mac_address)
-    except ValidationFailure:
+    if isinstance(mac_address(user_mac_address.replace('*', ':')), ValidationFailure):
         return False
     else:
         return True

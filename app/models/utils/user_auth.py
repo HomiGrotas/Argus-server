@@ -54,13 +54,14 @@ def get_user_by_jwt_token(token) -> bool:
 
 @basic_auth.verify_password
 def get_user_by_cred(email_or_mac, password) -> bool:
-    print('basic <', email_or_mac, password, '>')
+    print('basic <', email_or_mac, ',', password, '>')
     user, user_type = None, None
 
     if valid_email(email_or_mac):
         user, user_type = get_parent_by_email_password(email_or_mac, password)
 
     elif valid_mac_address(email_or_mac):
+        email_or_mac = email_or_mac.replace('*', ':')
         user, user_type = get_child_by_mac_and_token(email_or_mac, password)
 
     if user:
