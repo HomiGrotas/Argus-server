@@ -1,19 +1,18 @@
 from flask import g
-from typing import Union, Tuple
 
 from .auth_utils import User, valid_email, valid_mac_address
 from app.models import Child, Parent, UsersTypes
 from app import auth
 
 
-def get_parent_by_email_password(p_email: str, p_password: str) -> Tuple[Union[Parent, Child, None], Union[UsersTypes.parent, None]]:
+def get_parent_by_email_password(p_email: str, p_password: str):
     parent = Parent.query.filter_by(email=p_email).first()
     if parent and parent.verify_password(p_password):
         return parent, UsersTypes.Parent
     return None, None
 
 
-def get_child_by_mac_and_token(c_mac_address: str, c_token) -> Tuple[Union[Parent, Child, None], Union[UsersTypes.child, None]]:
+def get_child_by_mac_and_token(c_mac_address: str, c_token):
     child = Child.query.filter_by(mac_address=c_mac_address).first()
     if child and child.verify_token(c_token):
         return child, UsersTypes.Child

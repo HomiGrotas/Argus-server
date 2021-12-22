@@ -4,8 +4,8 @@ from app import db
 from app.models.utils import TimeStamp
 
 
-class ChildActivity(TimeStamp, db.Model):
+class ChildActivity(db.Model, TimeStamp):
     __tablename__ = 'ChildActivity'
 
-    record_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     child_id = Column(Integer, ForeignKey('Children.id'), nullable=False)

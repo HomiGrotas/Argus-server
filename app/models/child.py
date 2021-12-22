@@ -12,13 +12,13 @@ class Child(db.Model):
     id = Column(Integer, primary_key=True)
 
     parent_id = Column(Integer, ForeignKey('Parents.id'), nullable=False)
-    mac_address = Column(String, unique=True, nullable=False)
-    token = Column(String, nullable=False)
-    nickname = Column(String, nullable=False)
+    mac_address = Column(String(17), unique=True, nullable=False)
+    token = Column(String(64), nullable=False)
+    nickname = Column(String(20), nullable=False)
     blocked = Column(BOOLEAN, default=False)
 
     usage_limits = Column(JSON)       # {day: amount}
-    block_websites = Column(String)   # List will be parsed to '[x, y, z]'
+    # block_websites = Column(String)   # MTM with blocked websites
 
     activity = relationship('ChildActivity')
     web_history = relationship('WebHistory')
