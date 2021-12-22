@@ -13,5 +13,5 @@ class TimeStamp(object):
 
 
 class UsersTypes(Enum):
-    parent = 1
-    child = 2
+    Parent = 1
+    Child = 2

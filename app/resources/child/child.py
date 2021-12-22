@@ -32,11 +32,11 @@ class Child(Resource):
             db.session.rollback()
             raise exceptions.InternalServerError
 
-    @auth.login_required(role=models.UsersTypes.child.name)
+    @auth.login_required(role=models.UsersTypes.Parent)
     def get(self):
         return g.user.user.info()
 
-    @auth.login_required(role=models.UsersTypes.child.name)
+    @auth.login_required(role=models.UsersTypes.Parent)
     def patch(self):
         pass
 

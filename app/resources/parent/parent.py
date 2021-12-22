@@ -30,11 +30,11 @@ class Parent(Resource):
             db.session.rollback()
             raise exceptions.InternalServerError
 
-    @auth.login_required(role=models.UsersTypes.parent.name)
+    @auth.login_required(role=models.UsersTypes.Parent)
     def get(self):
         return g.user.user.info(), HTTPStatus.OK
 
-    @auth.login_required(role=models.UsersTypes.parent.name)
+    @auth.login_required(role=models.UsersTypes.Parent)
     def patch(self):
         args = parent_updater_parser.parse_args()
 
@@ -44,11 +44,8 @@ class Parent(Resource):
                     setattr(g.user.user, 'password_hash', g.user.user.hash_password(value))
                     continue
                 if key == 'email' and value != g.user.user.email:
-                    if models.Parent.query.filter_by(email=value).first() is not None:  # email doesn't exists
+                    if models.Parent.query.filter_by(email=value).first() is not None:  # ensure email doesn't exists
                         raise exceptions.EmailAlreadyTaken
-                    setattr(g.user.user, key, value)
-                    continue
-
                 setattr(g.user.user, key, value)
 
         try:

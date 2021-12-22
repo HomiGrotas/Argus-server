@@ -7,6 +7,6 @@ from app import models, auth
 
 class ParentToken(Resource):
 
-    @auth.login_required(role=models.UsersTypes.parent.name)
+    @auth.login_required(role=models.UsersTypes.Parent)
     def get(self):
         return g.user.user.generate_child_registration_token(), HTTPStatus.OK

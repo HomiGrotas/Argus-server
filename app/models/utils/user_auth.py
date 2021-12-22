@@ -6,17 +6,17 @@ from app.models import Child, Parent, UsersTypes
 from app import auth
 
 
-def get_parent_by_email_password(p_email: str, p_password: str) -> Tuple[Union[Parent, Child, None], Union[str, None]]:
+def get_parent_by_email_password(p_email: str, p_password: str) -> Tuple[Union[Parent, Child, None], Union[UsersTypes.parent, None]]:
     parent = Parent.query.filter_by(email=p_email).first()
     if parent and parent.verify_password(p_password):
-        return parent, UsersTypes.parent.name
+        return parent, UsersTypes.Parent
     return None, None
 
 
-def get_child_by_mac_and_token(c_mac_address: str, c_token) -> Tuple[Union[Parent, Child, None], Union[str, None]]:
+def get_child_by_mac_and_token(c_mac_address: str, c_token) -> Tuple[Union[Parent, Child, None], Union[UsersTypes.child, None]]:
     child = Child.query.filter_by(mac_address=c_mac_address).first()
     if child and child.verify_token(c_token):
-        return child, UsersTypes.child.name
+        return child, UsersTypes.Child
     return None, None
 
 
