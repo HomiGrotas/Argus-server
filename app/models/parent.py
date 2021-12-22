@@ -1,9 +1,12 @@
-from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity,create_access_token
+from jwt import encode, decode, ExpiredSignatureError, InvalidTokenError
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String
 from passlib.hash import sha256_crypt
+from flask import current_app
+from time import time
 
 from app import db
+from app.resources import exceptions
 
 
 class Parent(db.Model):
@@ -21,10 +24,13 @@ class Parent(db.Model):
         """ verify password. Safe from timing attacks """
         return sha256_crypt.verify(password, self.password_hash)
 
-    def generate_child_registration_token(self):
+    def generate_child_registration_token(self, time_delta=300):
         """ generates token for child registration """
-        additional_claims = {"type": "child_registration"}
-        return create_access_token(identity=self.id, additional_claims=additional_claims)
+        return encode(
+            {'id': self.id, 'exp': time() + time_delta},
+            current_app.config.get('SECRET_KEY'),
+            algorithm='HS256'
+        )
 
     def info(self):
         return {
@@ -39,9 +45,18 @@ class Parent(db.Model):
         return sha256_crypt.hash(password)
 
     @staticmethod
-    @jwt_required(locations='json')
-    def get_parent_identity_by_token():
-        r_type = get_jwt().get('type')
-        parent_id = get_jwt_identity()
-        assert r_type == 'child_registration', "Auth shouldn't go here"
+    def get_parent_identity_by_token(auth_token):
+        """
+         Decodes the auth token
+         :param auth_token:
+         :return: integer|string
+         """
+        try:
+            payload = decode(auth_token, current_app.config.get('SECRET_KEY'), algorithms='HS256')
+            parent_id = payload.get('id')
+
+        except ExpiredSignatureError:
+            raise exceptions.TokenExpired
+        except InvalidTokenError:
+            raise exceptions.InvalidSignatureError
         return parent_id

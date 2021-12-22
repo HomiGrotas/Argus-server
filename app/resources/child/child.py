@@ -17,7 +17,7 @@ class Child(Resource):
             raise exceptions.ChildAlreadyExists
 
         # find parent by token
-        parent_id = models.Parent.get_parent_identity_by_token()
+        parent_id = models.Parent.get_parent_identity_by_token(args.get('parent_token'))
         nickname = args.get('nickname')
         token = models.Child.generate_token()
         child = models.Child(mac_address=mac_address, parent_id=parent_id, nickname=nickname, token=token)

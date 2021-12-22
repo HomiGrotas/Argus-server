@@ -30,6 +30,10 @@ class InvalidSignatureError(HTTPException):
     pass
 
 
+class TokenExpired(HTTPException):
+    pass
+
+
 class UserTypeNotSpecified(HTTPException):
     pass
 
@@ -39,24 +43,33 @@ class NotAuthorized(HTTPException):
 
 
 errors = {
-    "PasswordTooShort": {
+    "PasswordTooShort":
+        {
         'message': 'Password is too short',
         'status': HTTPStatus.BAD_REQUEST
-    },
-    'EmailAlreadyTaken': {
+        },
+    'EmailAlreadyTaken':
+        {
         'message': 'email is already taken',
         'status': HTTPStatus.BAD_REQUEST
-    },
+        },
 
-    "InternalServerError": {
+    "InternalServerError":
+        {
         'message': "Oops! Internal error occurred",
         'status': HTTPStatus.INTERNAL_SERVER_ERROR
-    },
+        },
 
     "NoSuchParent":
         {
             'message': "No such parent",
             'status': HTTPStatus.NOT_FOUND
+        },
+
+    "TokenExpired":
+        {
+            'message': "The given token is expired. Please request your parent for a new token",
+            'status': HTTPStatus.NOT_ACCEPTABLE
         },
 
     "NoAuthorizationError":
