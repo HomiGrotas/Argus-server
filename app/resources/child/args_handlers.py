@@ -1,6 +1,6 @@
 from flask_restful import reqparse
 
-from app.resources.utils import mac_address_validator
+from app.models.utils.validators import mac_address_validator
 
 
 child_registration = reqparse.RequestParser()

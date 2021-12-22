@@ -1,5 +1,5 @@
 from flask_restful import reqparse
-from app.resources.utils import email_validator, password_validator
+from app.models.utils.validators import email_validator, password_validator
 
 
 parent_registration_parser = reqparse.RequestParser(bundle_errors=True)

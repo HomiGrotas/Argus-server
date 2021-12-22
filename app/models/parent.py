@@ -1,7 +1,6 @@
-from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity,create_access_token
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String
-from flask_jwt_extended import create_access_token
 from passlib.hash import sha256_crypt
 
 from app import db
@@ -25,11 +24,6 @@ class Parent(db.Model):
     def generate_child_registration_token(self):
         """ generates token for child registration """
         additional_claims = {"type": "child_registration"}
-        return create_access_token(identity=self.id, additional_claims=additional_claims)
-
-    def generate_auth_token(self):
-        """ generates token for auth """
-        additional_claims = {"type": "parent"}
         return create_access_token(identity=self.id, additional_claims=additional_claims)
 
     def info(self):

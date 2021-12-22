@@ -1,7 +1,6 @@
 from validators import mac_address, email, ValidationFailure
 from collections import namedtuple
-
-# todo: move to models
+from app.resources.exceptions import PasswordTooShort
 
 User = namedtuple('User', ['user', 'type'])
 

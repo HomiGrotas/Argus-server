@@ -1,7 +1,9 @@
 from http import HTTPStatus
-
-# noinspection PyProtectedMember
 from flask_restful import HTTPException
+
+
+class PasswordTooShort(HTTPException):
+    pass
 
 
 class EmailAlreadyTaken(HTTPException):
@@ -37,7 +39,10 @@ class NotAuthorized(HTTPException):
 
 
 errors = {
-
+    "PasswordTooShort": {
+        'message': 'Password is too short',
+        'status': HTTPStatus.BAD_REQUEST
+    },
     'EmailAlreadyTaken': {
         'message': 'email is already taken',
         'status': HTTPStatus.BAD_REQUEST

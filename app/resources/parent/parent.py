@@ -14,7 +14,6 @@ class Parent(Resource):
         email = args.get('email')
         nickname = args.get('nickname')
         password = args.get('password')
-
         if models.Parent.query.filter_by(email=email).first() is not None:
             raise exceptions.EmailAlreadyTaken
 
@@ -24,7 +23,7 @@ class Parent(Resource):
         try:
             db.session.add(parent)
             db.session.commit()
-            return {'token': parent.generate_auth_token()}, HTTPStatus.CREATED
+            return parent.info(), HTTPStatus.CREATED
 
         except Exception as e:
             app.logger.error("Error: %s", e.__str__())

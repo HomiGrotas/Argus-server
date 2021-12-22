@@ -1,6 +1,5 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey
-from flask_jwt_extended import create_access_token, get_jwt_identity
 from hmac import compare_digest
 from secrets import token_urlsafe
 
@@ -24,10 +23,6 @@ class Child(db.Model):
     activity = relationship('ChildActivity')
     web_history = relationship('WebHistory')
     waiting_commands = relationship('Command')
-
-    def generate_auth_token(self):
-        additional_claims = {"type": "child"}
-        return create_access_token(identity=self.id, additional_claims=additional_claims)
 
     def verify_token(self, token):
         """ compares users token to the given one. Safe from timing attacks """
