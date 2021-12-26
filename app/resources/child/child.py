@@ -1,6 +1,7 @@
 from flask_restful import Resource
 from flask import current_app as app, g
 from http import HTTPStatus
+from sqlalchemy import or_
 
 from .args_handlers import child_registration
 from app.resources import exceptions
@@ -13,11 +14,10 @@ class Child(Resource):
         args = child_registration.parse_args()
         mac_address = args.get('mac_address')
 
-        if models.Child.query.filter_by(mac_address=mac_address).first() is not None:
-            raise exceptions.ChildAlreadyExists
-
         # find parent by token
         parent_id = models.Parent.get_parent_identity_by_token(args.get('parent_token'))
+
+        # create child
         nickname = args.get('nickname')
         token = models.Child.generate_token()
         child = models.Child(mac_address=mac_address, parent_id=parent_id, nickname=nickname, token=token)

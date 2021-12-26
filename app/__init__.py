@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
-from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth, MultiAuth
+from flask_httpauth import HTTPBasicAuth
 
 from config import Config
 from app.resources.exceptions import errors
@@ -9,7 +9,7 @@ from app.resources.exceptions import errors
 db = SQLAlchemy()
 restful = Api(errors=errors)
 
-auth = HTTPBasicAuth()
+auth = HTTPBasicAuth()  # todo: change to basic_auth
 
 
 def create_app():
