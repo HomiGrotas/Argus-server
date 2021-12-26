@@ -18,8 +18,9 @@ def valid_email(user_email: str) -> bool:
 def valid_mac_address(user_mac_address: str) -> bool:
     """
         custom mac address validator
+        user_mac_address must be a str in order to perform .replace method
     """
-    if isinstance(mac_address(user_mac_address.replace('*', ':')), ValidationFailure):
+    if user_mac_address and isinstance(mac_address(user_mac_address.replace('*', ':')), ValidationFailure):
         return False
     else:
         return True
