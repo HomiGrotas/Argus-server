@@ -6,7 +6,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from app import db
 from app.resources import exceptions
-from .utils.MTM import child_blocked_websites
+from .utils.MTM.child_blocked_websites import child_blocked_websites
 
 
 class Child(db.Model):
