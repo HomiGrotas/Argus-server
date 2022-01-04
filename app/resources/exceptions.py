@@ -38,26 +38,35 @@ class UserTypeNotSpecified(HTTPException):
     pass
 
 
+class ChildDoesntExists(HTTPException):
+    pass
+
+
 class NotAuthorized(HTTPException):
     pass
 
 
 errors = {
+    "ChildDoesntExists":
+        {
+            'message': "Child doesn't exists",
+            'status': HTTPStatus.NOT_FOUND
+        },
     "PasswordTooShort":
         {
-        'message': 'Password is too short',
-        'status': HTTPStatus.BAD_REQUEST
+            'message': 'Password is too short',
+            'status': HTTPStatus.BAD_REQUEST
         },
     'EmailAlreadyTaken':
         {
-        'message': 'email is already taken',
-        'status': HTTPStatus.BAD_REQUEST
+            'message': 'email is already taken',
+            'status': HTTPStatus.BAD_REQUEST
         },
 
     "InternalServerError":
         {
-        'message': "Oops! Internal error occurred",
-        'status': HTTPStatus.INTERNAL_SERVER_ERROR
+            'message': "Oops! Internal error occurred",
+            'status': HTTPStatus.INTERNAL_SERVER_ERROR
         },
 
     "NoSuchParent":

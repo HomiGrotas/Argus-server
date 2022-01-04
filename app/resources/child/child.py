@@ -1,9 +1,8 @@
 from flask_restful import Resource
-from flask import current_app as app, g
+from flask import current_app as app
 from http import HTTPStatus
-from sqlalchemy import or_
 
-from .args_handlers import child_registration
+from .args_handlers import child_registration, child_info
 from app.resources import exceptions
 from app import models, auth, db
 
@@ -36,6 +35,7 @@ class Child(Resource):
     def get(self):
         args = child_info.parse_args()
         child_nickname = args.get('nickname')
+        fields = args.get('field')
 
         try:
             child = models.Child.query.filter_by(_nickname=child_nickname).first()
@@ -44,12 +44,16 @@ class Child(Resource):
             db.session.rollback()
             raise exceptions.InternalServerError
 
+        # get all info or info by fields
+        # Security warning: Notice that key fields can be given ONLY from info function (therefore can't be manipulated)
         if child:
-            return child.info()
+            info = child.info()
+            if fields:
+                info = {key: info[key] for key in fields if key in info}
+            return info
         raise exceptions.ChildDoesntExists
 
-
-@auth.login_required(role=models.UsersTypes.Parent)
+    @auth.login_required(role=models.UsersTypes.Parent)
     def patch(self):
         pass
 
