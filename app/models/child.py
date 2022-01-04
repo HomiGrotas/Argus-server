@@ -2,7 +2,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey
 from hmac import compare_digest
 from secrets import token_urlsafe
-from sqlalchemy.ext.hybrid import hybrid_property
 
 from app import db
 from app.resources import exceptions
@@ -27,19 +26,18 @@ class Child(db.Model):
     web_history = relationship('WebHistory')
     waiting_commands = relationship('Command')
 
-    @hybrid_property
+    @property
     def mac_address(self):
         return self._mac_address
 
     @mac_address.setter
     def mac_address(self, mac_address):
         # child can't have same mac address or nickname
-        if Child.query.filter_by(mac_address=mac_address).first() is not None:
-            raise exceptions.ChildAlreadyExists
-
+        if Child.query.filter_by(_mac_address=mac_address).first() is not None:
+            raise exceptions.ChildMacAlreadyExists
         self._mac_address = mac_address
 
-    @hybrid_property
+    @property
     def nickname(self):
         return self._nickname
 
@@ -47,7 +45,7 @@ class Child(db.Model):
     def nickname(self, nickname: str):
         # child can't have same mac address or nickname
         if Child.query.filter_by(_nickname=nickname).first() is not None:
-            raise exceptions.ChildAlreadyExists
+            raise exceptions.NicknameAlreadyExists
         self._nickname = nickname
 
     def verify_token(self, token):
