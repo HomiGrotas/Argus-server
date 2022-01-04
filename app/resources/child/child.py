@@ -1,9 +1,8 @@
 from flask_restful import Resource
 from flask import current_app as app, g
 from http import HTTPStatus
-from sqlalchemy import or_
 
-from .args_handlers import child_registration
+from .args_handlers import child_registration, child_info
 from app.resources import exceptions
 from app import models, auth, db
 
@@ -34,7 +33,19 @@ class Child(Resource):
 
     @auth.login_required(role=models.UsersTypes.Parent)
     def get(self):
-        return g.user.user.info()
+        args = child_info.parse_args()
+        child_nickname = args.get('nickname')
+
+        try:
+            child = models.Child.query.filter_by(_nickname=child_nickname).first()
+        except Exception as e:
+            app.logger.error("Error: %s", e.__str__())
+            db.session.rollback()
+            raise exceptions.InternalServerError
+
+        if child:
+            return child.info()
+        raise exceptions.ChildDoesntExists
 
     @auth.login_required(role=models.UsersTypes.Parent)
     def patch(self):
