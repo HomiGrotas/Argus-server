@@ -10,7 +10,7 @@ class EmailAlreadyTaken(HTTPException):
     pass
 
 
-class ChildMacAlreadyExists(HTTPException):
+class ChildAlreadyExists(HTTPException):
     pass
 
 
@@ -19,10 +19,6 @@ class InternalServerError(HTTPException):
 
 
 class NoSuchParent(HTTPException):
-    pass
-
-
-class NicknameAlreadyExists(HTTPException):
     pass
 
 
@@ -35,10 +31,6 @@ class InvalidSignatureError(HTTPException):
 
 
 class TokenExpired(HTTPException):
-    pass
-
-
-class ChildDoesntExists(HTTPException):
     pass
 
 
@@ -100,19 +92,9 @@ errors = {
             'message': "you aren't authorized for this method",
             'status': HTTPStatus.UNAUTHORIZED
         },
-    "ChildMacAlreadyExists":
+    "ChildAlreadyExists":
         {
             'message': 'child mac address already exists',
-            'status': HTTPStatus.BAD_REQUEST
-        },
-    "ChildDoesntExists":
-        {
-            'message': "Child doesn't exists",
-            'status': HTTPStatus.NOT_FOUND
-        },
-    "NicknameAlreadyExists":
-        {
-            'message': 'nickname already exists',
             'status': HTTPStatus.BAD_REQUEST
         },
 }

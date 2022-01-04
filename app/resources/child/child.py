@@ -1,8 +1,9 @@
 from flask_restful import Resource
 from flask import current_app as app, g
 from http import HTTPStatus
+from sqlalchemy import or_
 
-from .args_handlers import child_registration, child_info
+from .args_handlers import child_registration
 from app.resources import exceptions
 from app import models, auth, db
 
@@ -47,7 +48,8 @@ class Child(Resource):
             return child.info()
         raise exceptions.ChildDoesntExists
 
-    @auth.login_required(role=models.UsersTypes.Parent)
+
+@auth.login_required(role=models.UsersTypes.Parent)
     def patch(self):
         pass
 
