@@ -19,7 +19,8 @@ class Child(db.Model):
     _nickname = Column(String(20), nullable=False, unique=True)
     blocked = Column(BOOLEAN, default=False)
 
-    usage_limits = Column(JSON)       # {day: amount}
+    usage_limits = Column(JSON, default={
+        'sunday': 0, 'monday': 0, 'tuesday': 0, 'wednesday': 0, 'thursday': 0, 'friday': 0, 'saturday': 0})       # {day: amount}
 
     block_websites = relationship("BlockedWebsites", secondary=child_blocked_websites)  # MTM with blocked websites
     activity = relationship('ChildActivity')
@@ -55,8 +56,15 @@ class Child(db.Model):
     def info(self):
         return {
             'id': self.id,
-            'nickname': self._nickname,
+            'parent_id': self.parent_id,
             'mac_address': self._mac_address,
+            'nickname': self._nickname,
+            'blocked': self.blocked,
+            'usage_limits': self.usage_limits,
+            'block_websites': self.block_websites,
+            'activity': self.activity,
+            'web_history': self.web_history,
+            'waiting_commands': self.waiting_commands,
         }
 
     @staticmethod
