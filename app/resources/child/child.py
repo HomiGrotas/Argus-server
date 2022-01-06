@@ -1,10 +1,11 @@
 from flask_restful import Resource
-from flask import current_app as app
+from flask import current_app as app, g
 from http import HTTPStatus
 
-from .args_handlers import child_registration, child_info
+from .args_handlers import child_registration, child_info, child_updater
 from app.resources import exceptions
 from app import models, auth, db
+from app.models.utils.decorators import safe_db
 
 
 class Child(Resource):
@@ -21,15 +22,12 @@ class Child(Resource):
         token = models.Child.generate_token()
         child = models.Child(mac_address=mac_address, parent_id=parent_id, nickname=nickname, token=token)
 
-        try:
+        @safe_db
+        def create_child():
             db.session.add(child)
             db.session.commit()
             return {'token': child.token}, HTTPStatus.CREATED
-
-        except Exception as e:
-            app.logger.error("Error: %s", e.__str__())
-            db.session.rollback()
-            raise exceptions.InternalServerError
+        return create_child()
 
     @auth.login_required(role=models.UsersTypes.Parent)
     def get(self):
@@ -37,12 +35,10 @@ class Child(Resource):
         child_nickname = args.get('nickname')
         fields = args.get('field')
 
-        try:
-            child = models.Child.query.filter_by(_nickname=child_nickname).first()
-        except Exception as e:
-            app.logger.error("Error: %s", e.__str__())
-            db.session.rollback()
-            raise exceptions.InternalServerError
+        @safe_db
+        def get_child():
+            return models.Child.query.filter_by(_nickname=child_nickname).first()
+        child = get_child()
 
         # get all info or info by fields
         # Security warning: Notice that key fields can be given ONLY from info function (therefore can't be manipulated)
@@ -55,4 +51,30 @@ class Child(Resource):
 
     @auth.login_required(role=models.UsersTypes.Parent)
     def patch(self):
-        pass
+        args = child_updater.parse_args()
+        child_nickname = args.get('current_nickname')
+
+        @safe_db
+        def get_child():
+            return models.Child.query.filter_by(_nickname=child_nickname).first()
+
+        child = get_child()
+        if child:
+
+            # parent can change his children only
+            if child.parent_id != g.user.user.id:
+                raise exceptions.NotAuthorized
+
+            # update attributes
+            for key, value in args.items():
+                if value:
+                    setattr(child, key, value)
+
+            # commit in db
+            @safe_db
+            def update_child():
+                db.session.add(child)
+                db.session.commit()
+            update_child()
+
+        raise exceptions.ChildDoesntExists

@@ -6,6 +6,7 @@ from flask import g
 from .args_handlers import parent_registration_parser, parent_updater_parser
 from app.resources import exceptions
 from app import models, db, auth
+from app.models.utils.decorators import safe_db
 
 
 class Parent(Resource):
@@ -17,15 +18,12 @@ class Parent(Resource):
 
         parent = models.Parent(email=email, password_hash=models.Parent.hash_password(password), nickname=nickname)
 
-        try:
+        @safe_db
+        def add_child():
             db.session.add(parent)
             db.session.commit()
             return parent.info(), HTTPStatus.CREATED
-
-        except Exception as e:
-            app.logger.error("Error: %s", e.__str__())
-            db.session.rollback()
-            raise exceptions.InternalServerError
+        return add_child()
 
     @auth.login_required(role=models.UsersTypes.Parent)
     def get(self):
@@ -42,13 +40,10 @@ class Parent(Resource):
                     continue
                 setattr(g.user.user, key, value)
 
-        try:
+        @safe_db
+        def update_parent():
             db.session.add(g.user.user)
             db.session.commit()
 
-        except Exception as e:
-            app.logger.error("Error: %s", e.__str__())
-            db.session.rollback()
-            raise exceptions.InternalServerError
-
+        update_parent()
         return g.user.user.info(), HTTPStatus.OK
