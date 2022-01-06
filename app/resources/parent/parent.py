@@ -1,10 +1,8 @@
 from flask_restful import Resource
-from flask import current_app as app
 from http import HTTPStatus
 from flask import g
 
 from .args_handlers import parent_registration_parser, parent_updater_parser
-from app.resources import exceptions
 from app import models, db, auth
 from app.models.utils.decorators import safe_db
 

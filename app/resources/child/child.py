@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import current_app as app, g
+from flask import g
 from http import HTTPStatus
 
 from .args_handlers import child_registration, child_info, child_updater
@@ -43,6 +43,11 @@ class Child(Resource):
         # get all info or info by fields
         # Security warning: Notice that key fields can be given ONLY from info function (therefore can't be manipulated)
         if child:
+
+            # parent can see his children only
+            if child.parent_id != g.user.user.id:
+                raise exceptions.NotAuthorized
+
             info = child.info()
             if fields:
                 info = {key: info[key] for key in fields if key in info}
@@ -59,6 +64,7 @@ class Child(Resource):
             return models.Child.query.filter_by(_nickname=child_nickname).first()
 
         child = get_child()
+
         if child:
 
             # parent can change his children only
@@ -75,6 +81,8 @@ class Child(Resource):
             def update_child():
                 db.session.add(child)
                 db.session.commit()
+
             update_child()
+            return child.info(), HTTPStatus.OK
 
         raise exceptions.ChildDoesntExists

@@ -13,4 +13,6 @@ child_info.add_argument('nickname', required=True, type=str, location='args')
 child_info.add_argument('field', type=str, location='args', action='append')
 
 child_updater = reqparse.RequestParser()
-child_updater.add_argument()
+child_updater.add_argument('current_nickname', type=str, required=True, location='args')
+child_updater.add_argument('nickname', type=str, location='json')
+child_updater.add_argument('blocked', type=bool, location='json')
