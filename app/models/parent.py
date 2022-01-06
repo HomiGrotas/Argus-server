@@ -14,11 +14,31 @@ class Parent(db.Model):
 
     id = Column(Integer, primary_key=True)
 
-    email = Column(String(254), unique=True, nullable=False)
+    _email = Column(String(254), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    nickname = Column(String(32))
+    _nickname = Column(String(32), unique=True, nullable=False)
 
     children = relationship('Child')
+
+    @property
+    def email(self):
+        return self._email
+
+    @email.setter
+    def email(self, email: str):
+        if Parent.query.filter_by(_email=email).first() is not None:  # ensure email doesn't exists
+            raise exceptions.EmailAlreadyTaken
+        self._email = email
+
+    @property
+    def nickname(self):
+        return self._nickname
+
+    @nickname.setter
+    def nickname(self, nickname: str):
+        if Parent.query.filter_by(_nickname=nickname).first() is not None:  # ensure nickname doesn't exists
+            raise exceptions.NicknameAlreadyExists
+        self._nickname = nickname
 
     def verify_password(self, password):
         """ verify password. Safe from timing attacks """

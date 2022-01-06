@@ -56,4 +56,3 @@ class Child(Resource):
     @auth.login_required(role=models.UsersTypes.Parent)
     def patch(self):
         pass
-

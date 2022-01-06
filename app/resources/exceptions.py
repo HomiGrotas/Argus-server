@@ -46,7 +46,25 @@ class NotAuthorized(HTTPException):
     pass
 
 
+class NicknameAlreadyExists(HTTPException):
+    pass
+
+
+class ChildMacAlreadyExists(HTTPException):
+    pass
+
+
 errors = {
+    "ChildMacAlreadyExists":
+        {
+            'message': "Child mac address doesn't exists",
+            'status': HTTPStatus.NOT_FOUND
+        },
+    "NicknameAlreadyExists":
+        {
+            'message': "Chosen nickname already exists",
+            'status': HTTPStatus.BAD_REQUEST
+        },
     "ChildDoesntExists":
         {
             'message': "Child doesn't exists",

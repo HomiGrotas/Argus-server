@@ -14,11 +14,8 @@ class Parent(Resource):
         email = args.get('email')
         nickname = args.get('nickname')
         password = args.get('password')
-        if models.Parent.query.filter_by(email=email).first() is not None:
-            raise exceptions.EmailAlreadyTaken
 
-        parent = models.Parent(email=email, password_hash=models.Parent.hash_password(password))
-        parent.nickname = nickname
+        parent = models.Parent(email=email, password_hash=models.Parent.hash_password(password), nickname=nickname)
 
         try:
             db.session.add(parent)
@@ -43,9 +40,6 @@ class Parent(Resource):
                 if key == 'password':
                     setattr(g.user.user, 'password_hash', g.user.user.hash_password(value))
                     continue
-                if key == 'email' and value != g.user.user.email:
-                    if models.Parent.query.filter_by(email=value).first() is not None:  # ensure email doesn't exists
-                        raise exceptions.EmailAlreadyTaken
                 setattr(g.user.user, key, value)
 
         try:

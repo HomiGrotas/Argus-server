@@ -11,3 +11,6 @@ child_registration.add_argument('parent_token', required=True, location='json') 
 child_info = reqparse.RequestParser()
 child_info.add_argument('nickname', required=True, type=str, location='args')
 child_info.add_argument('field', type=str, location='args', action='append')
+
+child_updater = reqparse.RequestParser()
+child_updater.add_argument()
