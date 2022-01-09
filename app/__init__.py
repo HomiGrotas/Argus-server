@@ -17,8 +17,6 @@ def create_app():
     from app.resources.child import Child
 
     f_app = Flask(__name__)
-    f_app.config['ENV'] = 'development'
-    f_app.config.setdefault("JWT_ERROR_MESSAGE_KEY", "message")  # uniform message instead of msg
     f_app.config.from_object(Config)
     db.init_app(f_app)
 

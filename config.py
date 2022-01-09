@@ -13,10 +13,8 @@ apNjExOG5aJPAkPyVM4RrjPk3xO2H0bGHh3medADzM_hEd-eN3UtzGUzWIKPOQXsQ5AaWg
 """
     # os.environ.get('SECRET_KEY') or secrets.token_urlsafe(256)
 
-    #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or \
-    #                          'sqlite:///' + os.path.join(basedir, 'app.db')  # creates a local db when no uri is set
-
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:my-secret-pw@localhost/db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(minutes=EXPIRATION_MIN)    # disable expiration
     DEBUG = True
+    ENV = 'development'
