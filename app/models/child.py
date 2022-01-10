@@ -85,10 +85,10 @@ class Child(db.Model):
             'nickname': self.nickname,
             'blocked': self.blocked,
             'usage_limits': self.usage_limits,
-            'block_websites': self.block_websites,
-            'activity': self.activity,
-            'web_history': self.web_history,
-            'waiting_commands': self.waiting_commands,
+            'block_websites': 'Look at /blocked_websites',
+            'activity': 'Look at /child/activity',
+            'web_history': 'Look at /child/web_history',
+            'waiting_commands': 'Look at /commands',
         }
 
     @staticmethod
