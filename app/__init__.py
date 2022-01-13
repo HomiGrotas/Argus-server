@@ -15,15 +15,22 @@ auth = HTTPBasicAuth()  # todo: change to digest_auth
 def create_app():
     from app.resources.parent import Parent, ParentToken
     from app.resources.child import Child, ChildActivity
+    from app.resources.blockedWebsites import BlockedWebsites
+    from app.resources.commands import Commands
 
     f_app = Flask(__name__)
     f_app.config.from_object(Config)
     db.init_app(f_app)
 
+    # /parent
     restful.add_resource(Parent, '/parent')
     restful.add_resource(ParentToken, '/parent/child_registration_token')
+
+    # /child
     restful.add_resource(Child, '/child')
     restful.add_resource(ChildActivity, '/child/activity')
+    restful.add_resource(BlockedWebsites, '/child/blocked_websites')
+    restful.add_resource(Commands, '/child/commands')
 
     # noinspection PyTypeChecker
     restful.init_app(f_app)

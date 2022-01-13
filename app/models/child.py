@@ -2,7 +2,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey
 from hmac import compare_digest
 from secrets import token_urlsafe
-from datetime import datetime
 
 from app import db
 from app.resources import exceptions
@@ -23,7 +22,7 @@ class Child(db.Model):
     _usage_limits = Column(JSON, default={
         'sunday': 0, 'monday': 0, 'tuesday': 0, 'wednesday': 0, 'thursday': 0, 'friday': 0, 'saturday': 0})       # {day: amount}
 
-    block_websites = relationship("BlockedWebsites", secondary=child_blocked_websites)  # MTM with blocked websites
+    blocked_websites = relationship("BlockedWebsites", secondary=child_blocked_websites)  # MTM with blocked websites
     activity = relationship('ChildActivity')
     web_history = relationship('WebHistory')
     waiting_commands = relationship('Command')
@@ -43,7 +42,7 @@ class Child(db.Model):
     def nickname(self):
         return self._nickname
 
-    @nickname.setter
+    @nickname.setter    # todo: nickname unique only for parent children
     def nickname(self, nickname: str):
         # child can't have same mac address or nickname
         if Child.query.filter_by(_nickname=nickname).first() is not None:
