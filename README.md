@@ -1,4 +1,4 @@
-![Build Status](https://github.com/HomiGrotas/server/actions/workflows/tests/badge.svg)
+![Build Status](https://github.com/HomiGrotas/server/workflows/tests/badge.svg)
 
 # server
 High-school final project

@@ -14,7 +14,7 @@ auth = HTTPBasicAuth()  # todo: change to digest_auth
 
 def create_app():
     from app.resources.parent import Parent, ParentToken
-    from app.resources.child import Child, ChildActivity
+    from app.resources.child import Child, ChildActivity, WebHistory
     from app.resources.blockedWebsites import BlockedWebsites
     from app.resources.commands import Commands
 
@@ -29,8 +29,11 @@ def create_app():
     # /child
     restful.add_resource(Child, '/child')
     restful.add_resource(ChildActivity, '/child/activity')
-    restful.add_resource(BlockedWebsites, '/child/blocked_websites')
-    restful.add_resource(Commands, '/child/commands')
+    restful.add_resource(WebHistory, '/child/web_history')
+
+    # utils
+    restful.add_resource(BlockedWebsites, '/blocked_websites')
+    restful.add_resource(Commands, '/commands')
 
     # noinspection PyTypeChecker
     restful.init_app(f_app)

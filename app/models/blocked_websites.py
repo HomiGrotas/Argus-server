@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String
 
 from app import db
 
+# todo: add levels (1-5)
+
 
 class BlockedWebsites(db.Model):
     __tablename__ = "BlockedWebsites"
