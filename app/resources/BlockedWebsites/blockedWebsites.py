@@ -13,7 +13,7 @@ class BlockedWebsites(Resource):
     @auth.login_required
     def get(self):
         args = get_blocked_parser.parse_args()
-        child_nickname = args.get('child_nickname')
+        child_nickname = args.get('nickname')
 
         @safe_db
         def get_child():    # todo: _and child in parents children
@@ -35,7 +35,7 @@ class BlockedWebsites(Resource):
     @auth.login_required(role=models.UsersTypes.Parent)
     def post(self):
         args = post_blocked_parser.parse_args()
-        child_nickname = args.get('child_nickname')
+        child_nickname = args.get('nickname')
         domain = args.get('domain')
 
         @safe_db
@@ -62,7 +62,7 @@ class BlockedWebsites(Resource):
     @auth.login_required(role=models.UsersTypes.Parent)
     def delete(self):
         args = delete_blocked_parser.parse_args()
-        child_nickname = args.get('child_nickname')
+        child_nickname = args.get('nickname')
         domain = args.get('domain')
 
         @safe_db
