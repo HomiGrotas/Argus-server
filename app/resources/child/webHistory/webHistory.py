@@ -1,6 +1,8 @@
+from flask_restful import Resource
+
 
 # todo: research - split into a microservice?
-class WebHistory:
+class WebHistory(Resource):
     def post(self):
         pass
 
