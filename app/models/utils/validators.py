@@ -19,12 +19,15 @@ def mac_address_validator(mac: str):
     raise ValueError(f'{mac} is not a valid mac address')
 
 
-# todo: password validation format
 def password_validator(password: str):
+    return password
+
+    # todo: password validation format
+    """
     if match(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$", password):
         return password
     raise ValueError(f'entered password is not a valid password')
-
+    """
 
 def domain_validator(_domain: str):
     if domain(_domain):
