@@ -37,7 +37,7 @@ class Child(Resource):
 
         @safe_db
         def get_child():
-            return models.Child.query.get(child_id).first()
+            return models.Child.query.get(child_id)
         child = get_child()
 
         # get all info or info by fields
@@ -61,7 +61,7 @@ class Child(Resource):
 
         @safe_db
         def get_child():
-            return models.Child.query.get(child_id).first()
+            return models.Child.query.get(child_id)
         child = get_child()
 
         if child:
