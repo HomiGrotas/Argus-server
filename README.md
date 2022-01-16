@@ -23,8 +23,8 @@ Monitoring computers with ability to block unwanted website traffic
 | Methods | Parameters                                  | Auth  |
 |---------|---------------------------------------------|-------|
 | POST    | mac_address<br> nickname <br> parent_token  | Token |
-| GET     | id <br> field (optional)              | Parent|
-| PATCH   | id<br> nickname (optional)<br> blocked (optional)| Parent|
+| GET     | id <br> field (optional)                    | Parent|
+| PATCH   | id <br> nickname (optional) <br> blocked (optional) <br> usage_limits (optional)| Parent|
 <br><br>
 
 #### /child/activity

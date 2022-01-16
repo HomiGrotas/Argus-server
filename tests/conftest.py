@@ -19,19 +19,23 @@ class Parent:
 
 
 class Child:
+    child_counter = 2   # first child is created  in test_post_child
+
     def __init__(self, mac_address: str, nickname: str, token: str):
+        self.id = Child.child_counter
         self.mac_address = mac_address
         self.nickname = nickname
         self.token = token
+        Child.child_counter += 1
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def client():
     """A test client for the app."""
     return app.test_client()
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def parent(client):
     json_data = {
         'email': f"{random_string()}@test.com",
@@ -63,8 +67,10 @@ def child(client, parent):
     assert resp.status_code == HTTPStatus.CREATED
     token = resp.json['token']
 
-    return Child(
+    c = Child(
         mac_address=json_data['mac_address'],
         nickname=json_data['nickname'],
         token=token,
     )
+    parent.children.append(c)
+    return c
