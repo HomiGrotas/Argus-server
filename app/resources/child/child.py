@@ -32,12 +32,12 @@ class Child(Resource):
     @auth.login_required(role=models.UsersTypes.Parent)
     def get(self):
         args = child_info.parse_args()
-        child_nickname = args.get('nickname')
+        child_id = args.get('id')
         fields = args.get('field')
 
         @safe_db
         def get_child():
-            return models.Child.query.filter_by(_nickname=child_nickname).first()
+            return models.Child.query.get(child_id).first()
         child = get_child()
 
         # get all info or info by fields
@@ -57,12 +57,11 @@ class Child(Resource):
     @auth.login_required(role=models.UsersTypes.Parent)
     def patch(self):
         args = child_updater.parse_args()
-        child_nickname = args.get('current_nickname')
+        child_id = args.get('id')
 
         @safe_db
         def get_child():
-            return models.Child.query.filter_by(_nickname=child_nickname).first()
-
+            return models.Child.query.get(child_id).first()
         child = get_child()
 
         if child:
