@@ -25,12 +25,12 @@ class ChildActivity(Resource):
     @auth.login_required(role=models.UsersTypes.Parent)
     def get(self):
         args = get_activity_parser.parse_args()
-        child_nickname = args.get('nickname')
+        child_id = args.get('id')
         amount = args.get('amount')
 
         @safe_db
         def get_child():
-            return models.Child.query.filter_by(_nickname=child_nickname).first()
+            return models.Child.query.get(child_id)
 
         child = get_child()
 
@@ -40,6 +40,11 @@ class ChildActivity(Resource):
                 raise exceptions.NotAuthorized
 
             # get the activity amount specified by the user
-            return [child.activity[i].info() for i in range(amount)], HTTPStatus.OK
+            activity_length = len(child.activity)
+            status = HTTPStatus.OK
+            if amount > activity_length:
+                amount = activity_length
+                status = HTTPStatus.PARTIAL_CONTENT
+            return [child.activity[i].info() for i in range(amount)], status
 
         raise exceptions.ChildDoesntExists

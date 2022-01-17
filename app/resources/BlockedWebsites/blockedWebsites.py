@@ -13,11 +13,11 @@ class BlockedWebsites(Resource):
     @auth.login_required
     def get(self):
         args = get_blocked_parser.parse_args()
-        child_nickname = args.get('nickname')
+        child_id = args.get('id')
 
         @safe_db
-        def get_child():    # todo: _and child in parents children
-            return models.Child.query.filter_by(_nickname=child_nickname).first()
+        def get_child():
+            return models.Child.query.get(child_id)
 
         child = get_child()
 
@@ -35,12 +35,12 @@ class BlockedWebsites(Resource):
     @auth.login_required(role=models.UsersTypes.Parent)
     def post(self):
         args = post_blocked_parser.parse_args()
-        child_nickname = args.get('nickname')
+        child_id = args.get('id')
         domain = args.get('domain')
 
         @safe_db
         def get_child():
-            return models.Child.query.filter_by(_nickname=child_nickname).first()
+            return models.Child.query.get(child_id)
 
         child = get_child()
 
@@ -53,21 +53,23 @@ class BlockedWebsites(Resource):
             @safe_db
             def post_blocked_website():
                 blocked_website = models.BlockedWebsites(domain=domain)
-                db.session.add(child.blocked_websites.append(blocked_website))
+                child.blocked_websites.append(blocked_website)
+                db.session.add(child)
+                db.session.commit()
                 return blocked_website.info(), HTTPStatus.CREATED
-            return post_blocked_website
+            return post_blocked_website()
 
         raise exceptions.ChildDoesntExists
 
     @auth.login_required(role=models.UsersTypes.Parent)
     def delete(self):
         args = delete_blocked_parser.parse_args()
-        child_nickname = args.get('nickname')
+        child_id = args.get('id')
         domain = args.get('domain')
 
         @safe_db
         def get_child():
-            return models.Child.query.filter_by(_nickname=child_nickname).first()
+            return models.Child.query.get(child_id)
 
         child = get_child()
 
@@ -78,10 +80,10 @@ class BlockedWebsites(Resource):
                 raise exceptions.NotAuthorized
 
             @safe_db
-            def post_blocked_website():
+            def delete_blocked_website():
                 blocked_website = models.BlockedWebsites(domain=domain)
                 db.session.add(child.blocked_websites.remove(blocked_website))
                 return blocked_website.info(), HTTPStatus.CREATED
-            return post_blocked_website
+            return delete_blocked_website()
 
         raise exceptions.ChildDoesntExists
