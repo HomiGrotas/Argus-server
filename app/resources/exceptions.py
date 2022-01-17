@@ -54,6 +54,14 @@ class ChildMacAlreadyExists(HTTPException):
     pass
 
 
+class DomainDoesntExists(HTTPException):
+    pass
+
+
+class DomainAlreadyExists(HTTPException):
+    pass
+
+
 errors = {
     "ChildMacAlreadyExists":
         {
@@ -122,6 +130,16 @@ errors = {
     "ChildAlreadyExists":
         {
             'message': 'child mac address already exists',
+            'status': HTTPStatus.BAD_REQUEST
+        },
+    "DomainDoesntExists":
+        {
+            'message': "specified domain doesn't exists",
+            'status': HTTPStatus.NOT_FOUND
+        },
+    "DomainAlreadyExists":
+        {
+            'message': "specified domain already exists",
             'status': HTTPStatus.BAD_REQUEST
         },
 }

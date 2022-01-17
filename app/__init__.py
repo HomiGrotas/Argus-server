@@ -17,6 +17,7 @@ def create_app(test_config=None):
     from app.resources.child import Child, ChildActivity, WebHistory
     from app.resources.blockedWebsites import BlockedWebsites
     from app.resources.commands import Commands
+    from app.resources.views import BlockedPage
 
     f_app = Flask(__name__)
 
@@ -41,6 +42,7 @@ def create_app(test_config=None):
     # utils
     restful.add_resource(BlockedWebsites, '/blocked_websites')
     restful.add_resource(Commands, '/commands')
+    restful.add_resource(BlockedPage, '/blocked')
 
     # noinspection PyTypeChecker
     restful.init_app(f_app)

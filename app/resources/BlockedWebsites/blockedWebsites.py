@@ -1,6 +1,7 @@
 from flask_restful import Resource
 from flask import g
 from http import HTTPStatus
+from sqlalchemy import and_
 
 from .args_handlers import get_blocked_parser, post_blocked_parser, delete_blocked_parser
 from app.models.utils.decorators import safe_db
@@ -28,7 +29,7 @@ class BlockedWebsites(Resource):
                 raise exceptions.NotAuthorized
 
             # get the activity amount specified by the user
-            return child.blocked_websites, HTTPStatus.OK
+            return [b.info() for b in child.blocked_websites], HTTPStatus.OK
 
         raise exceptions.ChildDoesntExists
 
@@ -50,9 +51,14 @@ class BlockedWebsites(Resource):
             if g.user.user.id != child.parent_id:
                 raise exceptions.NotAuthorized
 
+            site = tuple(filter(lambda s: s.domain == domain, child.blocked_websites))  # search specified domain
+            if site:
+                raise exceptions.DomainAlreadyExists
+
             @safe_db
             def post_blocked_website():
-                blocked_website = models.BlockedWebsites(domain=domain)
+                blocked_website = models.BlockedWebsites()
+                blocked_website.domain = domain
                 child.blocked_websites.append(blocked_website)
                 db.session.add(child)
                 db.session.commit()
@@ -79,11 +85,16 @@ class BlockedWebsites(Resource):
             if g.user.user.id != child.parent_id:
                 raise exceptions.NotAuthorized
 
+            site = tuple(filter(lambda s: s.domain == domain, child.blocked_websites))  # search specified domain
+            if not site:
+                raise exceptions.DomainDoesntExists
+
             @safe_db
             def delete_blocked_website():
-                blocked_website = models.BlockedWebsites(domain=domain)
-                db.session.add(child.blocked_websites.remove(blocked_website))
-                return blocked_website.info(), HTTPStatus.CREATED
+                child.blocked_websites.remove(site[0])     # there should be only one site
+                db.session.add(child)
+                db.session.commit()
+                return [b.info() for b in child.blocked_websites], HTTPStatus.OK
             return delete_blocked_website()
 
         raise exceptions.ChildDoesntExists

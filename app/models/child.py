@@ -1,11 +1,19 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey
+from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey, Enum
+from enum import Enum as eE
 from hmac import compare_digest
 from secrets import token_urlsafe
 
 from app import db
 from app.resources import exceptions
 from .utils.MTM.child_blocked_websites import child_blocked_websites
+
+
+class ProtectionLevels(eE):
+    NO = 0
+    MINIMAL = 1
+    NORMAL = 2
+    HARD = 3
 
 
 class Child(db.Model):
@@ -21,6 +29,7 @@ class Child(db.Model):
 
     _usage_limits = Column(JSON, default={
         'sunday': 0, 'monday': 0, 'tuesday': 0, 'wednesday': 0, 'thursday': 0, 'friday': 0, 'saturday': 0})       # {day: amount}
+    _level = Column(Enum(ProtectionLevels), nullable=False, default=ProtectionLevels.NORMAL)
 
     blocked_websites = relationship("BlockedWebsites", secondary=child_blocked_websites)  # MTM with blocked websites
     activity = relationship('ChildActivity')
@@ -60,6 +69,16 @@ class Child(db.Model):
         self._blocked = block
 
     @property
+    def level(self):
+        return self._level
+
+    @level.setter
+    def level(self, new_level: int):
+        if new_level is None or not 0 <= new_level <= 3:
+            raise ValueError("Level must be between 0 and 4")
+        self._level = ProtectionLevels(new_level)
+
+    @property
     def usage_limits(self):
         return self._usage_limits
 
@@ -84,6 +103,7 @@ class Child(db.Model):
             'nickname': self.nickname,
             'blocked': self.blocked,
             'usage_limits': self.usage_limits,
+            'protection_level': self.level.value,
             'block_websites': 'Look at /blocked_websites',
             'activity': 'Look at /child/activity',
             'web_history': 'Look at /child/web_history',
