@@ -57,8 +57,8 @@ class ChildMacAlreadyExists(HTTPException):
 errors = {
     "ChildMacAlreadyExists":
         {
-            'message': "Child mac address doesn't exists",
-            'status': HTTPStatus.NOT_FOUND
+            'message': "Child mac address already exists",
+            'status': HTTPStatus.BAD_REQUEST
         },
     "NicknameAlreadyExists":
         {
