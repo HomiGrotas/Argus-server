@@ -1,11 +1,11 @@
-from sqlalchemy import Table, ForeignKey, Column, Integer
+from sqlalchemy import Table, Column, Integer, ForeignKey
 
 from app import db
 
-# Many To Many between Child and BlockedWebsites tables
+# Many To Many of Child and BlockedWebsites tables
 child_blocked_websites = Table(
     'child_blocked_websites',
     db.metadata,
-    Column('child_id', ForeignKey('Children.id'), primary_key=True),
-    Column('website_id', ForeignKey('BlockedWebsites.id'), primary_key=True)
+    Column('child_id', Integer, ForeignKey('Children.id')),
+    Column('website_id', Integer, ForeignKey('BlockedWebsites.id'))
 )
