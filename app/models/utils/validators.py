@@ -29,7 +29,8 @@ def password_validator(password: str):
     raise ValueError(f'entered password is not a valid password')
     """
 
+
 def domain_validator(_domain: str):
     if domain(_domain):
-        return domain
+        return _domain
     raise ValueError(f'{_domain} is not a valid domain name')
