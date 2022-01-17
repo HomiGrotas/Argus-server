@@ -58,3 +58,15 @@ Monitoring computers with ability to block unwanted website traffic
 | GET     | id                    | Parent/ Child
 | DELETE  | child_id <br> command | Parent
 <br><br>
+
+
+## Protection levels
+| Protection Level  | Number    | Description                   |
+|-------------------|-----------|-------------------------------|
+| NO                | 0         | No protection at all. All domains are allowed.
+| MINIMAL           | 1         | Blocks customized domains
+| NORMAL            | 2         | * Blocks domains from our saved list <br> * Customized domains
+| HARD              | 3         | Blocks all web traffic
+
+## Password format
+## Available commands
