@@ -46,7 +46,7 @@ Monitoring computers with ability to block unwanted website traffic
 #### /blocked_websites
 | Methods | Parameters            | Auth |
 |---------|-----------------------|------|
-| POST    | nickname <br> domain  | Parent
+| POST    | id <br> domain  | Parent
 | GET     | id                    | Parent/ Child
 | DELETE  | child_id <br> domain  | Parent
 <br><br>
@@ -54,7 +54,7 @@ Monitoring computers with ability to block unwanted website traffic
 #### /commands
 | Methods | Parameters            | Auth |
 |---------|-----------------------|------|
-| POST    | nickname <br command> | Parent
+| POST    | id <br command> | Parent
 | GET     | id                    | Parent/ Child
 | DELETE  | child_id <br> command | Parent
 <br><br>
