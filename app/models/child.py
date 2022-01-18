@@ -1,10 +1,10 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey, Enum
+from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey, Enum, and_
 from enum import Enum as eE
 from hmac import compare_digest
 from secrets import token_urlsafe
 
-from app import db
+from app import db, models
 from app.resources import exceptions
 from .utils.MTM.child_blocked_websites import child_blocked_websites
 
@@ -24,7 +24,7 @@ class Child(db.Model):
     parent_id = Column(Integer, ForeignKey('Parents.id'), nullable=False)
     _mac_address = Column(String(17), unique=True, nullable=False)
     token = Column(String(154), nullable=False)
-    _nickname = Column(String(20), nullable=False, unique=True)
+    _nickname = Column(String(20), nullable=False)
     _blocked = Column(BOOLEAN, default=False)
 
     _usage_limits = Column(JSON, default={
@@ -51,10 +51,13 @@ class Child(db.Model):
     def nickname(self):
         return self._nickname
 
-    @nickname.setter    # todo: nickname unique only for parent children
+    @nickname.setter
     def nickname(self, nickname: str):
-        # child can't have same mac address or nickname
-        if Child.query.filter_by(_nickname=nickname).first() is not None:
+        # child from same parent can't have same nickname
+        child_with_same_nickname = Child.query.filter(
+            Child._nickname == nickname, Child.parent_id == self.parent_id).first()
+
+        if child_with_same_nickname:
             raise exceptions.NicknameAlreadyExists
         self._nickname = nickname
 
