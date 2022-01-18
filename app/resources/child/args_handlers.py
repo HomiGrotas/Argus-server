@@ -16,4 +16,5 @@ child_updater = reqparse.RequestParser()
 child_updater.add_argument('id', type=int, required=True, location='args')
 child_updater.add_argument('nickname', type=str, location='json')
 child_updater.add_argument('blocked', type=bool, location='json')
-# todo: add usage_limits
+child_updater.add_argument('usage_limits', type=dict, location='json')
+child_updater.add_argument('level', type=int, location='json')

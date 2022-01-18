@@ -72,7 +72,7 @@ class Child(Resource):
 
             # update attributes
             for key, value in args.items():
-                if value:
+                if value is not None:
                     setattr(child, key, value)
 
             # commit in db
