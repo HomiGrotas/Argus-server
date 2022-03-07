@@ -5,4 +5,6 @@ from .child_activity import ChildActivity
 from .web_history import WebHistory
 from .commands import Command
 from .blocked_websites import BlockedWebsites
+from .blocked_apps import BlockedApps
+from .apps_history import AppsHistory
 from .utils.user_auth import *

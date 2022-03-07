@@ -2,14 +2,16 @@ from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
+from flask_cors import CORS
+from dotenv import load_dotenv
+load_dotenv()
 
 from config import Config
 from app.resources.exceptions import errors
 
 db = SQLAlchemy()
 restful = Api(errors=errors)
-
-auth = HTTPBasicAuth()  # todo: change to digest_auth
+auth = HTTPBasicAuth()
 
 
 def create_app(test_config=None):
@@ -29,6 +31,7 @@ def create_app(test_config=None):
         f_app.config.update(test_config)
 
     db.init_app(f_app)
+    CORS(f_app, resources={'*': {"origins": '*'}})
 
     # /parent
     restful.add_resource(Parent, '/parent')
@@ -49,15 +52,13 @@ def create_app(test_config=None):
     return f_app
 
 
-if __name__ == '__main__':
-    flask_app = create_app()
+flask_app = create_app()
 
-    # define the shell context
-    @flask_app.shell_context_processor
-    def shell_context():  # pragma: no cover
-        from app import models
+# define the shell context
+@flask_app.shell_context_processor
+def shell_context():  # pragma: no cover
+    from app import models
 
-        ctx = {'db': db, 'models': models}
-        return ctx
+    ctx = {'db': db, 'models': models}
+    return ctx
 
-    flask_app.run()

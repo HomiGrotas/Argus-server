@@ -4,9 +4,10 @@ from enum import Enum as eE
 from hmac import compare_digest
 from secrets import token_urlsafe
 
-from app import db, models
+from app import db
 from app.resources import exceptions
 from .utils.MTM.child_blocked_websites import child_blocked_websites
+from .utils.MTM.child_blocked_apps import child_blocked_apps
 
 
 class ProtectionLevels(eE):
@@ -32,6 +33,9 @@ class Child(db.Model):
     _level = Column(Enum(ProtectionLevels), nullable=False, default=ProtectionLevels.NORMAL)
 
     blocked_websites = relationship("BlockedWebsites", secondary=child_blocked_websites)  # MTM with blocked websites
+    blocked_apps = relationship("BlockedApps", secondary=child_blocked_apps)
+
+    apps_history = relationship("AppsHistory")
     activity = relationship('ChildActivity')
     web_history = relationship('WebHistory')
     waiting_commands = relationship('Command')
