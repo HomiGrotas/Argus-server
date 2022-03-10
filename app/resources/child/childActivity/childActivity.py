@@ -41,10 +41,11 @@ class ChildActivity(Resource):
 
             # get the activity amount specified by the user
             activity_length = len(child.activity)
-            status = HTTPStatus.OK
-            if amount > activity_length:
-                amount = activity_length
+            if amount < activity_length:
                 status = HTTPStatus.PARTIAL_CONTENT
+            else:
+                amount = activity_length
+                status = HTTPStatus.OK
             return [child.activity[i].info() for i in range(amount)], status
 
         raise exceptions.ChildDoesntExists

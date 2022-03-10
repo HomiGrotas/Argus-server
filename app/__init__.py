@@ -20,6 +20,8 @@ def create_app(test_config=None):
     from app.resources.blockedWebsites import BlockedWebsites
     from app.resources.commands import Commands
     from app.resources.views import BlockedPage
+    from app.resources.blockedApps import BlockedApps
+    from app.resources.appsHistory.appsHistory import AppsHistory
 
     f_app = Flask(__name__)
 
@@ -43,6 +45,8 @@ def create_app(test_config=None):
     restful.add_resource(WebHistory, '/child/web_history')
 
     # utils
+    restful.add_resource(AppsHistory, '/app_history')
+    restful.add_resource(BlockedApps, '/blocked_apps')
     restful.add_resource(BlockedWebsites, '/blocked_websites')
     restful.add_resource(Commands, '/commands')
     restful.add_resource(BlockedPage, '/blocked')
@@ -53,6 +57,7 @@ def create_app(test_config=None):
 
 
 flask_app = create_app()
+
 
 # define the shell context
 @flask_app.shell_context_processor

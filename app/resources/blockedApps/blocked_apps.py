@@ -8,12 +8,15 @@ from app.resources import exceptions
 from app import auth, models, db
 
 
-class BlockedWebsites(Resource):
+class BlockedApps(Resource):
 
     @auth.login_required
     def get(self):
         args = get_blocked_parser.parse_args()
         child_id = args.get('id')
+
+        if not child_id and g.user.type == models.UsersTypes.Child:
+            child_id = g.user.user.id
 
         @safe_db
         def get_child():
@@ -28,7 +31,7 @@ class BlockedWebsites(Resource):
                 raise exceptions.NotAuthorized
 
             # get the activity amount specified by the user
-            return [b.info() for b in child.blocked_websites], HTTPStatus.OK
+            return [b.info() for b in child.blocked_apps], HTTPStatus.OK
 
         raise exceptions.ChildDoesntExists
 
@@ -36,7 +39,7 @@ class BlockedWebsites(Resource):
     def post(self):
         args = post_blocked_parser.parse_args()
         child_id = args.get('id')
-        domain = args.get('domain')
+        app = args.get('app')
 
         @safe_db
         def get_child():
@@ -50,18 +53,18 @@ class BlockedWebsites(Resource):
             if g.user.user.id != child.parent_id:
                 raise exceptions.NotAuthorized
 
-            site = tuple(filter(lambda s: s.domain == domain, child.blocked_websites))  # search specified domain
-            if site:
+            app_exists = tuple(filter(lambda s: s.app == app, child.blocked_apps))  # search specified app
+            if app_exists:
                 raise exceptions.DomainAlreadyExists
 
             @safe_db
             def post_blocked_website():
-                blocked_website = models.BlockedWebsites()
-                blocked_website.domain = domain
-                child.blocked_websites.append(blocked_website)
+                blocked_app = models.BlockedApps()
+                blocked_app.app = app
+                child.blocked_apps.append(blocked_app)
                 db.session.add(child)
                 db.session.commit()
-                return blocked_website.info(), HTTPStatus.CREATED
+                return blocked_app.info(), HTTPStatus.CREATED
             return post_blocked_website()
 
         raise exceptions.ChildDoesntExists
@@ -70,7 +73,7 @@ class BlockedWebsites(Resource):
     def delete(self):
         args = delete_blocked_parser.parse_args()
         child_id = args.get('id')
-        domain = args.get('domain')
+        app = args.get('app')
 
         @safe_db
         def get_child():
@@ -84,16 +87,16 @@ class BlockedWebsites(Resource):
             if g.user.user.id != child.parent_id:
                 raise exceptions.NotAuthorized
 
-            site = tuple(filter(lambda s: s.domain == domain, child.blocked_websites))  # search specified domain
-            if not site:
+            app = tuple(filter(lambda s: s.app == app, child.blocked_apps))  # search specified app
+            if not app:
                 raise exceptions.DomainDoesntExists
 
             @safe_db
             def delete_blocked_website():
-                child.blocked_websites.remove(site[0])     # there should be only one site
+                child.blocked_apps.remove(app[0])     # there should be only one site
                 db.session.add(child)
                 db.session.commit()
-                return [b.info() for b in child.blocked_websites], HTTPStatus.OK
+                return [b.info() for b in child.blocked_apps], HTTPStatus.OK
             return delete_blocked_website()
 
         raise exceptions.ChildDoesntExists
