@@ -31,7 +31,7 @@ class BlockedApps(Resource):
                 raise exceptions.NotAuthorized
 
             # get the activity amount specified by the user
-            return [b.info() for b in child.blocked_apps], HTTPStatus.OK
+            return {b.app: b.info() for b in child.blocked_apps}, HTTPStatus.OK
 
         raise exceptions.ChildDoesntExists
 
