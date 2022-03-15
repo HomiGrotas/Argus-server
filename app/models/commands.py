@@ -10,3 +10,10 @@ class Command(db.Model, CreatedAt):
     id = Column(Integer, primary_key=True)
     command = Column(String(50), nullable=False)
     to_user = Column(Integer, ForeignKey('Children.id'), nullable=False)
+
+    def info(self):
+        return {
+            'id': self.id,
+            'command': self.command,
+            'to': self.to_user,
+        }
