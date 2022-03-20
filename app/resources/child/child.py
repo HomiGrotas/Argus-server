@@ -29,11 +29,14 @@ class Child(Resource):
             return {'token': child.token}, HTTPStatus.CREATED
         return create_child()
 
-    @auth.login_required(role=models.UsersTypes.Parent)
+    @auth.login_required
     def get(self):
         args = child_info.parse_args()
         child_id = args.get('id')
         fields = args.get('field')
+
+        if not child_id and g.user.type == models.UsersTypes.Child:
+            child_id = g.user.user.id
 
         @safe_db
         def get_child():

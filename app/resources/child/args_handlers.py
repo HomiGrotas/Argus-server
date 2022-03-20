@@ -9,7 +9,7 @@ child_registration.add_argument('nickname', required=True, type=str, location='j
 child_registration.add_argument('parent_token', required=True, location='json')  # JWT token for attaching to parent
 
 child_info = reqparse.RequestParser()
-child_info.add_argument('id', required=True, type=int, location='args')
+child_info.add_argument('id', type=int, location='args')
 child_info.add_argument('field', type=str, location='args', action='append')
 
 child_updater = reqparse.RequestParser()
