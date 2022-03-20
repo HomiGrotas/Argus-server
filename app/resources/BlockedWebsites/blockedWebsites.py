@@ -15,6 +15,9 @@ class BlockedWebsites(Resource):
         args = get_blocked_parser.parse_args()
         child_id = args.get('id')
 
+        if not child_id and g.user.type == models.UsersTypes.Child:
+            child_id = g.user.user.id
+
         @safe_db
         def get_child():
             return models.Child.query.get(child_id)
@@ -28,7 +31,7 @@ class BlockedWebsites(Resource):
                 raise exceptions.NotAuthorized
 
             # get the activity amount specified by the user
-            return [b.info() for b in child.blocked_websites], HTTPStatus.OK
+            return {b.domain: b.info() for b in child.blocked_websites}, HTTPStatus.OK
 
         raise exceptions.ChildDoesntExists
 
