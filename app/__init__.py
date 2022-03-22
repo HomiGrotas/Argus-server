@@ -23,21 +23,21 @@ def create_app(test_config=None):
     from app.resources.blockedApps import BlockedApps
     from app.resources.appsHistory.appsHistory import AppsHistory
 
-    f_app = Flask(__name__)
+    app = Flask(__name__)
 
-    @f_app.route('/')
+    @app.route('/')
     def home():
         return "working"
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
-        f_app.config.from_object(Config)
+        app.config.from_object(Config)
     else:
         # load the test config if passed in
-        f_app.config.update(test_config)
+        app.config.update(test_config)
 
-    db.init_app(f_app)
-    CORS(f_app, resources={'*': {"origins": '*'}})
+    db.init_app(app)
+    CORS(app, resources={'*': {"origins": '*'}})
 
     # /parent
     restful.add_resource(Parent, '/parent')
@@ -56,15 +56,15 @@ def create_app(test_config=None):
     restful.add_resource(BlockedPage, '/blocked')
 
     # noinspection PyTypeChecker
-    restful.init_app(f_app)
-    return f_app
+    restful.init_app(app)
+    return app
 
 
-flask_app = create_app()
+app = create_app()
 
 
 # define the shell context
-@flask_app.shell_context_processor
+@app.shell_context_processor
 def shell_context():  # pragma: no cover
     from app import models
 
