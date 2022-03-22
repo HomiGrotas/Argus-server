@@ -11,3 +11,4 @@ passlib
 validators
 python-dotenv
 cryptography
+gunicorn
