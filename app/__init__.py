@@ -25,6 +25,10 @@ def create_app(test_config=None):
 
     f_app = Flask(__name__)
 
+    @f_app.route('/')
+    def home():
+        return "working"
+
     if test_config is None:
         # load the instance config, if it exists, when not testing
         f_app.config.from_object(Config)
