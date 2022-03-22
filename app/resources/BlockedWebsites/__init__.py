@@ -1,5 +1,1 @@
-from flask_restful import Resource
-
-
-class BlockedWebsites(Resource):
-    pass
+from .blocked_websites import BlockedWebsites

@@ -17,7 +17,7 @@ auth = HTTPBasicAuth()
 def create_app(test_config=None):
     from app.resources.parent import Parent, ParentToken
     from app.resources.child import Child, ChildActivity, WebHistory
-    from app.resources.blockedWebsites import BlockedWebsites
+    from app.resources.blockedWebsites.blocked_websites import BlockedWebsites
     from app.resources.commands import Commands
     from app.resources.views import BlockedPage
     from app.resources.blockedApps import BlockedApps
