@@ -1,1 +1,1 @@
-from .blockedWebsites import BlockedWebsites
+from .blocked_websites import BlockedWebsites
