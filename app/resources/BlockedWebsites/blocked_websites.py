@@ -9,7 +9,8 @@ from app import auth, models, db
 
 
 class BlockedWebsites(Resource):
-
+    pass
+"""
     @auth.login_required
     def get(self):
         args = get_blocked_parser.parse_args()
@@ -100,3 +101,4 @@ class BlockedWebsites(Resource):
             return delete_blocked_website()
 
         raise exceptions.ChildDoesntExists
+"""
