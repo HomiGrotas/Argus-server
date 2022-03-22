@@ -51,7 +51,7 @@ def create_app(test_config=None):
     # utils
     restful.add_resource(AppsHistory, '/app_history')
     restful.add_resource(BlockedApps, '/blocked_apps')
-    restful.add_resource(BlockedWebsites, '/blocked_websites')
+    #restful.add_resource(BlockedWebsites, '/blocked_websites')
     restful.add_resource(Commands, '/commands')
     restful.add_resource(BlockedPage, '/blocked')
 
