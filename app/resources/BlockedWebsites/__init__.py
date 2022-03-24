@@ -1,1 +1,1 @@
-x = 5
+from .blocked_websites import BlockedWebsites
