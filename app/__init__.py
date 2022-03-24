@@ -3,8 +3,6 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
 from flask_cors import CORS
-from dotenv import load_dotenv
-load_dotenv()
 
 from config import Config
 from app.resources.exceptions import errors
