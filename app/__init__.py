@@ -35,9 +35,11 @@ def create_app():
 
     # load the instance config, if it exists, when not testing
     app.config.from_object(Config)
+
+    # create db
+    db.init_app(app)
     db.create_all(app=app)
 
-    db.init_app(app)
     CORS(app, resources={'*': {"origins": '*'}})
 
     # /parent
