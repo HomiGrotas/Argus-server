@@ -1,1 +1,2 @@
-from .blocked_websites import BlockedWebsites
+class BlockedWebsites:
+    pass
