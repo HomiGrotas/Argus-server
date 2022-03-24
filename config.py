@@ -7,10 +7,10 @@ EXPIRATION_MIN = 2
 
 
 def get_postgres():
-    path = os.environ.get("DATABASE_URL")
-    if not path:
-        raise FileNotFoundError("Couldn't find DATABASE_URL")
-    return path.replace("postgres://", "postgresql://", 1)
+    uri = os.getenv("DATABASE_URL")  # or other relevant config var
+    if uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql://", 1)
+    return uri
 
 
 class Config(object):
