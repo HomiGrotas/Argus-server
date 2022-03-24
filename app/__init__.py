@@ -12,7 +12,7 @@ restful = Api(errors=errors)
 auth = HTTPBasicAuth()
 
 
-def create_app(test_config=None):
+def create_app():
     from app.resources.parent import Parent, ParentToken
     from app.resources.child import Child, ChildActivity, WebHistory
     #from app.resources.blockedWebsites import BlockedWebsites
@@ -33,12 +33,9 @@ def create_app(test_config=None):
         db.create_all(app=app)
         return "reset performed"
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_object(Config)
-    else:
-        # load the test config if passed in
-        app.config.update(test_config)
+    # load the instance config, if it exists, when not testing
+    app.config.from_object(Config)
+    db.create_all(app=app)
 
     db.init_app(app)
     CORS(app, resources={'*': {"origins": '*'}})
