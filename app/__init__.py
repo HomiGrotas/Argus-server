@@ -33,6 +33,7 @@ def create_app(test_config=None):
     def reset():
         db.drop_all(app=app)
         db.create_all(app=app)
+        return "reset performed"
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
