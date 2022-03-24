@@ -36,9 +36,12 @@ def create_app():
     # load the instance config, if it exists, when not testing
     app.config.from_object(Config)
 
-    # create db
     db.init_app(app)
-    db.create_all(app=app)
+
+    # create db if doesn't exists
+    if db.metadata.tables is not None:
+        db.create_all(app=app)
+        print("created app")
 
     CORS(app, resources={'*': {"origins": '*'}})
 
