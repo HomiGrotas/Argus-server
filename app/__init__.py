@@ -29,6 +29,11 @@ def create_app(test_config=None):
     def home():
         return "working"
 
+    @app.route('reset')
+    def reset():
+        db.drop_all(app=app)
+        db.create_all(app=app)
+
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_object(Config)
