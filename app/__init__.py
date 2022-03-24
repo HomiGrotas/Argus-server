@@ -19,7 +19,7 @@ def create_app():
     from app.resources.views import BlockedPage
     from app.resources.blockedApps import BlockedApps
     from app.resources.appsHistory.appsHistory import AppsHistory
-    from app.resources.blockedWebsites import BlockedWebsites
+    from app.resources.blockedSites import BlockedWebsites
 
     app = Flask(__name__)
 
@@ -57,7 +57,7 @@ def create_app():
     # utils
     restful.add_resource(AppsHistory, '/app_history')
     restful.add_resource(BlockedApps, '/blocked_apps')
-    #restful.add_resource(BlockedWebsites, '/blocked_websites')
+    restful.add_resource(BlockedWebsites, '/blocked_websites')
     restful.add_resource(Commands, '/commands')
     restful.add_resource(BlockedPage, '/blocked')
 
