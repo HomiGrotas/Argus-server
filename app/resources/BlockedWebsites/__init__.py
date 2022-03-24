@@ -1,2 +1,1 @@
-class BlockedWebsites:
-    pass
+x = 5
