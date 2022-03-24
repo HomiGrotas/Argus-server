@@ -15,11 +15,11 @@ auth = HTTPBasicAuth()
 def create_app():
     from app.resources.parent import Parent, ParentToken
     from app.resources.child import Child, ChildActivity, WebHistory
-    from app.resources.blockedWebsites import x
     from app.resources.commands import Commands
     from app.resources.views import BlockedPage
     from app.resources.blockedApps import BlockedApps
     from app.resources.appsHistory.appsHistory import AppsHistory
+    from app.resources.blockedWebsites import BlockedWebsites
 
     app = Flask(__name__)
 
