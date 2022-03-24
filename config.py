@@ -10,6 +10,7 @@ def get_postgres():
     uri = os.getenv("DATABASE_URL")  # or other relevant config var
     if uri.startswith("postgres://"):
         uri = uri.replace("postgres://", "postgresql://", 1)
+    print("postgres uri:", uri)
     return uri
 
 
