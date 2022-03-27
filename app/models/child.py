@@ -93,12 +93,12 @@ class Child(db.Model):
     @usage_limits.setter
     def usage_limits(self, new_limits: dict):
         for key, val in new_limits.items():
-            if key not in self.usage_limits:
+            if key not in self._usage_limits:
                 raise KeyError(f"{key} is not an acceptable day")
             elif val < 0:
                 raise ValueError(f"Limit must be a positive number. Got: {val}")
             self._usage_limits[key] = val
-        flag_modified(self, "usage_limits")
+        flag_modified(self, "_usage_limits")
 
     def verify_token(self, token):
         """ compares users token to the given one. Safe from timing attacks """
