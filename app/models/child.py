@@ -91,7 +91,7 @@ class Child(db.Model):
 
     @usage_limits.setter
     def usage_limits(self, new_limits: dict):
-        for key, val in new_limits:
+        for key, val in new_limits.items():
             if key not in self.usage_limits:
                 raise KeyError(f"{key} is not an acceptable day")
             elif val < 0:
