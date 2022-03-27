@@ -96,7 +96,7 @@ class Child(db.Model):
                 raise KeyError(f"{key} is not an acceptable day")
             elif val < 0:
                 raise ValueError(f"Limit must be a positive number. Got: {val}")
-            self.usage_limits[key] = val
+            self._usage_limits[key] = val
 
     def verify_token(self, token):
         """ compares users token to the given one. Safe from timing attacks """
