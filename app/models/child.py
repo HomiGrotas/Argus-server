@@ -1,5 +1,6 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey, Enum, and_
+from sqlalchemy import Column, Integer, JSON, BOOLEAN, String, ForeignKey, Enum
+from sqlalchemy.orm.attributes import flag_modified
 from enum import Enum as eE
 from hmac import compare_digest
 from secrets import token_urlsafe
@@ -97,6 +98,7 @@ class Child(db.Model):
             elif val < 0:
                 raise ValueError(f"Limit must be a positive number. Got: {val}")
             self._usage_limits[key] = val
+        flag_modified(self, "usage_limits")
 
     def verify_token(self, token):
         """ compares users token to the given one. Safe from timing attacks """
