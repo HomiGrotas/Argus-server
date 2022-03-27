@@ -84,7 +84,6 @@ class Child(Resource):
             # commit in db
             @safe_db
             def update_child():
-                db.session.add(child)
                 db.session.commit()
 
             update_child()
