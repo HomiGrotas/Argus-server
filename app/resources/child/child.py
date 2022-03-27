@@ -76,7 +76,10 @@ class Child(Resource):
             # update attributes
             for key, value in args.items():
                 if value is not None:
-                    setattr(child, key, value)
+                    try:
+                        setattr(child, key, value)
+                    except Exception as e:
+                        return e.__str__(), HTTPStatus.BAD_REQUEST
 
             # commit in db
             @safe_db
