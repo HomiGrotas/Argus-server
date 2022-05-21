@@ -8,7 +8,7 @@ EXPIRATION_MIN = 2
 
 
 def get_postgres():
-    uri = os.getenv("DATABASE_URL")  # or other relevant config var
+    uri = os.getenv("DATABASE_URL", "sqlite:///db.db")  # or other relevant config var
     if uri.startswith("postgres://"):
         uri = uri.replace("postgres://", "postgresql://", 1)
     return uri
