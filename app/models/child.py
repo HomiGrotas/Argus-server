@@ -4,6 +4,8 @@ from sqlalchemy.orm.attributes import flag_modified
 from enum import Enum as eE
 from hmac import compare_digest
 from secrets import token_urlsafe
+from sqlalchemy.ext.hybrid import hybrid_property
+from datetime import timedelta, datetime
 
 from app import db
 from app.resources import exceptions
@@ -100,6 +102,13 @@ class Child(db.Model):
             self._usage_limits[key] = val
         flag_modified(self, "_usage_limits")
 
+    @hybrid_property
+    def connected(self) -> bool:
+        if self.activity:
+            last = self.activity[-1].end
+            return last - timedelta(hours=5) < datetime.now()
+        return False
+
     def verify_token(self, token):
         """ compares users token to the given one. Safe from timing attacks """
         return compare_digest(token, self.token)
@@ -113,6 +122,7 @@ class Child(db.Model):
             'blocked': self.blocked,
             'usage_limits': self.usage_limits,
             'protection_level': self.level.value,
+            'connected': self.connected,
             'block_websites': 'Look at /blocked_websites',
             'activity': 'Look at /child/activity',
             'web_history': 'Look at /child/web_history',
