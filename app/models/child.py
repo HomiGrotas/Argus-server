@@ -115,9 +115,9 @@ class Child(db.Model):
         total = 0
         now = datetime.utcnow()
         for time in self.activity[::-1]:
-            if now - time.end < timedelta(minutes=5):
+            if now - time.end < timedelta(days=1):
                 total += 5
-        return total
+        return total/60
 
     def verify_token(self, token):
         """ compares users token to the given one. Safe from timing attacks """
