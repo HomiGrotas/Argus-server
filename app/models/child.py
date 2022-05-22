@@ -105,9 +105,19 @@ class Child(db.Model):
     @hybrid_property
     def connected(self) -> bool:
         if self.activity:
+            now = datetime.utcnow()
             last = self.activity[-1].end
-            return last - timedelta(hours=5) < datetime.now()
+            return now - last < timedelta(days=1)
         return False
+
+    @hybrid_property
+    def time_spent(self) -> float:
+        total = 0
+        now = datetime.utcnow()
+        for time in self.activity[::-1]:
+            if now - time.end < timedelta(minutes=5):
+                total += 5
+        return total
 
     def verify_token(self, token):
         """ compares users token to the given one. Safe from timing attacks """
@@ -123,6 +133,7 @@ class Child(db.Model):
             'usage_limits': self.usage_limits,
             'protection_level': self.level.value,
             'connected': self.connected,
+            'time_spent': self.time_spent,
             'block_websites': 'Look at /blocked_websites',
             'activity': 'Look at /child/activity',
             'web_history': 'Look at /child/web_history',
