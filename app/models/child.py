@@ -32,7 +32,7 @@ class Child(db.Model):
     _blocked = Column(BOOLEAN, default=False)
 
     _usage_limits = Column(JSON, default={
-        'sunday': 0, 'monday': 0, 'tuesday': 0, 'wednesday': 0, 'thursday': 0, 'friday': 0, 'saturday': 0})       # {day: amount}
+        'sunday': 1, 'monday': 1, 'tuesday': 1, 'wednesday': 1, 'thursday': 1, 'friday': 1, 'saturday': 1})       # {day: amount in hours}
     _level = Column(Enum(ProtectionLevels), nullable=False, default=ProtectionLevels.NORMAL)
 
     blocked_websites = relationship("BlockedWebsites", secondary=child_blocked_websites)  # MTM with blocked websites
@@ -98,7 +98,7 @@ class Child(db.Model):
             if key not in self._usage_limits:
                 raise KeyError(f"{key} is not an acceptable day")
             elif val < 0:
-                raise ValueError(f"Limit must be a positive number. Got: {val}")
+                raise ValueError(f"Hours limit must be a positive number. Got: {val}")
             self._usage_limits[key] = val
         flag_modified(self, "_usage_limits")
 
