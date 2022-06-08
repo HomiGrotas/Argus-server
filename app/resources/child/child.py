@@ -48,7 +48,8 @@ class Child(Resource):
         if child:
 
             # parent can see his children only
-            if child.parent_id != g.user.user.id:
+            # only parent and child themself can see
+            if g.user.user.id not in (child.parent_id, child.id):
                 raise exceptions.NotAuthorized
 
             info = child.info()

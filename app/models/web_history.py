@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey, String, BOOLEAN, DATETIME
+from sqlalchemy import Column, Integer, ForeignKey, String, BOOLEAN, DateTime
 
 from app import db
 
@@ -10,7 +10,7 @@ class WebHistory(db.Model):
     child_id = Column(Integer, ForeignKey('Children.id'),  nullable=False)
     _url = Column(String(2048), nullable=False)
     _title = Column(String(2048), nullable=True)
-    _date = Column(DATETIME, nullable=False)
+    _date = Column(DateTime, nullable=False)
     _blocked = Column(BOOLEAN, nullable=False, default=False)
 
     @property
