@@ -14,7 +14,7 @@ auth = HTTPBasicAuth()
 
 def create_app():
     from app.resources.parent import Parent, ParentToken
-    from app.resources.child import Child, ChildActivity, WebHistory
+    from app.resources.child import Child, ChildActivity, WebHistory, BlockedStatistics, Popularity
     from app.resources.commands import Commands
     from app.resources.blockedApps import BlockedApps
     from app.resources.appsHistory.appsHistory import AppsHistory
@@ -52,12 +52,14 @@ def create_app():
     restful.add_resource(Child, '/child')
     restful.add_resource(ChildActivity, '/child/activity')
     restful.add_resource(WebHistory, '/child/web_history')
+    restful.add_resource(BlockedStatistics, '/child/statistics/blocked')
 
     # utils
     restful.add_resource(AppsHistory, '/app_history')
     restful.add_resource(BlockedApps, '/blocked_apps')
     restful.add_resource(BlockedWebsites, '/blocked_websites')
     restful.add_resource(Commands, '/commands')
+    restful.add_resource(Popularity, '/popularity')
 
     # noinspection PyTypeChecker
     restful.init_app(app)
