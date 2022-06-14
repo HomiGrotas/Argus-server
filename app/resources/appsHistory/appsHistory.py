@@ -36,7 +36,8 @@ class AppsHistory(Resource):
             else:
                 amount = history_length
                 status = HTTPStatus.OK
-            return [child.apps_history[i].info() for i in range(amount)], status
+
+            return [child.apps_history[history_length-i-1].info() for i in range(amount)], status
 
         raise exceptions.ChildDoesntExists
 
