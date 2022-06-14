@@ -96,7 +96,7 @@ class Child(db.Model):
     def usage_limits(self, new_limits: dict):
         for key, val in new_limits.items():
             try:
-                val = int(val)
+                val = float(val)
             except ValueError:
                 raise ValueError(f"{val} is not a number!")
             if key not in self._usage_limits:
