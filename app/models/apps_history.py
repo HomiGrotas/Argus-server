@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, BOOLEAN
+from datetime import datetime
 
 from .utils.types import CreatedAt
 from app import db
@@ -44,5 +45,5 @@ class AppsHistory(db.Model, CreatedAt):
             "state": self.state,
             "app_name": self._name,
             "blocked": self._blocked,
-            'date': self.created_at.__str__(),
+            'date': self.created_at.strftime("%d/%m/%y %H:%M:%S"),
         }
