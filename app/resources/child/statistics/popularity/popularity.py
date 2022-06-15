@@ -15,14 +15,14 @@ class Popularity(Resource):
 
         # get most popular apps of the parent children
         histories = db.session.query(
-            models.AppsHistory,
+            models.AppsHistory._name,
             func.count(models.AppsHistory.id).label('qty'))\
             .filter(models.AppsHistory.child_id.in_(children))\
             .group_by(models.AppsHistory._name)\
             .order_by(desc('qty')).all()
 
         histories = [{
-            'app_name': h[0].name,
+            'app_name': h[0],
             'amount': h[1]
         }
             for h in histories]
