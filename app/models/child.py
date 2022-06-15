@@ -120,7 +120,7 @@ class Child(db.Model):
         now = datetime.utcnow()
         for time in self.activity[::-1]:
             if now - time.end < timedelta(days=1):
-                total += 5
+                total += 1
 
         return float("{:.2f}".format(total/60))
 
