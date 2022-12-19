@@ -2,6 +2,7 @@
 
 # Info
 High-school final project with grade of 100.
+<br>
 Monitoring computers with ability to block unwanted website traffic, app use, limit time and observe the child's computer use
 
 # Screenshots
