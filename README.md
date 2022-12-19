@@ -1,8 +1,8 @@
 ![Build Status](https://github.com/HomiGrotas/server/workflows/tests/badge.svg)
 
 # Info
-High-school final project
-Monitoring computers with ability to block unwanted website traffic
+High-school final project with grade of 100.
+Monitoring computers with ability to block unwanted website traffic, app use, limit time and observe the child's computer use
 
 # Endpoints
 ## /parent
