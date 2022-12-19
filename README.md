@@ -4,6 +4,40 @@
 High-school final project with grade of 100.
 Monitoring computers with ability to block unwanted website traffic, app use, limit time and observe the child's computer use
 
+# Screenshots
+## Parent login
+![alt text ](photos/login.png)
+
+## Parent register
+![alt text ](photos/register.png)
+
+
+## New parent
+![alt text ](photos/parentNoChildren.jpeg)
+
+## Time limit settings
+![alt text ](photos/timeLimit.jpeg)
+
+
+## Blocked apps settings
+![alt text ](photos/blockedApps.jpeg)
+
+## Blocked websites settings
+![alt text ](photos/websites.jpeg)
+
+## Apps history
+![alt text ](photos/appHistory.jpeg)
+
+## Parent dashboard
+![alt text ](photos/dashboard.jpeg)
+
+
+## Child registration
+![alt text ](photos/childRegister.png)
+
+## Child time limit
+![alt text ](photos/timeLimit.png)
+
 # Endpoints
 ## /parent
 | Methods | Parameters                      | Auth   |
